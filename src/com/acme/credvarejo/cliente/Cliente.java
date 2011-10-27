@@ -1,4 +1,4 @@
-package com.acme.credvarejo;
+package com.acme.credvarejo.cliente;
 
 import java.util.Date;
 
@@ -16,6 +16,10 @@ public class Cliente {
 
 	private int sexo;
 
+	public static final int SEXO_FEMININO = 1;
+	
+	public static final int SEXO_MASCULINO = 0;
+
 	public Cliente(Cpf cpf, String nome, int idade, double renda, int sexo) {
 		this.clienteDesde = new Date();
 		this.cpf = cpf;
@@ -24,7 +28,7 @@ public class Cliente {
 		this.renda = renda;
 		this.sexo = sexo;
 	}
-	
+
 	public boolean equals(Cliente cliente) {
 		return getCpf().equals(cliente.getCpf());
 	}
@@ -68,7 +72,7 @@ public class Cliente {
 	public void setClienteDesde(Date clienteDesde) {
 		this.clienteDesde = clienteDesde;
 	}
-
+	
 	public void setCpf(Cpf cpf) {
 		this.cpf = cpf;
 	}
@@ -76,15 +80,15 @@ public class Cliente {
 	public void setIdade(int idade) {
 		this.idade = idade;
 	}
-	
+
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
 
 	public void setRenda(double renda) {
 		this.renda = renda;
-	}
-
+	} 
+	
 	public void setSexo(int sexo) {
 		this.sexo = sexo;
 	}

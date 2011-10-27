@@ -1,4 +1,4 @@
-package com.acme.credvarejo;
+package com.acme.credvarejo.conta;
 
 public class IdentificadorContaCrediario {
 
@@ -23,6 +23,10 @@ public class IdentificadorContaCrediario {
 
 	public long getNumero() {
 		return numero;
+	}
+
+	public void setNumero(long numero) {
+		this.numero = numero;
 	}
 
 	public boolean verificarValidadeDigito(int digito) {

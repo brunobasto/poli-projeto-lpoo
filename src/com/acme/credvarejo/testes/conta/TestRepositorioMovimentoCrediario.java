@@ -1,13 +1,13 @@
-package com.acme.credvarejo.test;
+package com.acme.credvarejo.testes.conta;
 
 import java.util.Date;
 
-import com.acme.credvarejo.Cliente;
-import com.acme.credvarejo.ContaCrediario;
-import com.acme.credvarejo.Cpf;
-import com.acme.credvarejo.IdentificadorContaCrediario;
-import com.acme.credvarejo.MovimentoCrediario;
-import com.acme.credvarejo.RepositorioMovimentoCrediario;
+import com.acme.credvarejo.ado.conta.RepositorioMovimentoCrediario;
+import com.acme.credvarejo.cliente.Cliente;
+import com.acme.credvarejo.cliente.Cpf;
+import com.acme.credvarejo.conta.ContaCrediario;
+import com.acme.credvarejo.conta.IdentificadorContaCrediario;
+import com.acme.credvarejo.conta.MovimentoCrediario;
 
 public class TestRepositorioMovimentoCrediario {
 

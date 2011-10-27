@@ -1,4 +1,6 @@
-package com.acme.credvarejo;
+package com.acme.credvarejo.conta;
+
+import com.acme.credvarejo.cliente.Cliente;
 
 public class ContaCrediario {
 
@@ -50,6 +52,10 @@ public class ContaCrediario {
 		return limiteDeCredito;
 	}
 
+	public double getSaldoDevido() {
+		return saldoDevido;
+	}
+
 	public int getVencimento() {
 		return vencimento;
 	}
@@ -72,6 +78,10 @@ public class ContaCrediario {
 
 	public void setLimiteDeCredito(double limiteDeCredito) {
 		this.limiteDeCredito = limiteDeCredito;
+	}
+
+	public void setSaldoDevido(double saldoDevido) {
+		this.saldoDevido = saldoDevido;
 	}
 
 	public void setVencimento(int vencimento) {

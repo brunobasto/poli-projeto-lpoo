@@ -1,6 +1,6 @@
-package com.acme.credvarejo.test;
+package com.acme.credvarejo.testes.conta;
 
-import com.acme.credvarejo.IdentificadorContaCrediario;
+import com.acme.credvarejo.conta.IdentificadorContaCrediario;
 
 public class TestIdentificadorContaCrediario {
 

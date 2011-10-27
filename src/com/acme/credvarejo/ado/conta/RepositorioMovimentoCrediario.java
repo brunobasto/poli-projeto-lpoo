@@ -1,8 +1,10 @@
-package com.acme.credvarejo;
+package com.acme.credvarejo.ado.conta;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import com.acme.credvarejo.conta.MovimentoCrediario;
 
 public class RepositorioMovimentoCrediario {
 

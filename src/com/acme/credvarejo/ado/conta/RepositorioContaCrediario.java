@@ -1,8 +1,11 @@
-package com.acme.credvarejo;
+package com.acme.credvarejo.ado.conta;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import com.acme.credvarejo.conta.ContaCrediario;
+import com.acme.credvarejo.conta.IdentificadorContaCrediario;
 
 public class RepositorioContaCrediario {
 
@@ -44,11 +47,13 @@ public class RepositorioContaCrediario {
 		return contas;
 	}
 
-	public void removeConta(ContaCrediario conta) {
+	public void removeConta(IdentificadorContaCrediario identificador) {
 		List<ContaCrediario> list = new ArrayList<ContaCrediario>(
 			Arrays.asList(getContas()));
 
-		if (getConta(conta.getIdentificador()) != null) {
+		ContaCrediario conta = getConta(identificador);
+
+		if (conta != null) {
 			list.remove(conta);
 		}
 

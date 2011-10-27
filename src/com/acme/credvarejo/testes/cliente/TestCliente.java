@@ -1,7 +1,7 @@
-package com.acme.credvarejo.test;
+package com.acme.credvarejo.testes.cliente;
 
-import com.acme.credvarejo.Cliente;
-import com.acme.credvarejo.Cpf;
+import com.acme.credvarejo.cliente.Cliente;
+import com.acme.credvarejo.cliente.Cpf;
 
 public class TestCliente {
 

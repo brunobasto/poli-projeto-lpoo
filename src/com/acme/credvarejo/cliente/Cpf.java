@@ -1,4 +1,4 @@
-package com.acme.credvarejo;
+package com.acme.credvarejo.cliente;
 
 public class Cpf {
 

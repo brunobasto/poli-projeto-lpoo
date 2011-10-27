@@ -1,8 +1,8 @@
-package com.acme.credvarejo.test;
+package com.acme.credvarejo.testes.cliente;
 
-import com.acme.credvarejo.Cliente;
-import com.acme.credvarejo.Cpf;
-import com.acme.credvarejo.RepositorioClientes;
+import com.acme.credvarejo.ado.cliente.RepositorioClientes;
+import com.acme.credvarejo.cliente.Cliente;
+import com.acme.credvarejo.cliente.Cpf;
 
 public class TestRepositorioClientes {
 
@@ -21,7 +21,7 @@ public class TestRepositorioClientes {
 		// Retorna null - Nao Achou
 		System.out.println(r.getCliente(new Cpf("123456789")));
 
-		r.removeCliente(bruno);
+		r.removeCliente(cpf);
 
 		System.out.println(r.getClientes().length);
 	}

@@ -1,10 +1,10 @@
-package com.acme.credvarejo.test;
+package com.acme.credvarejo.testes.conta;
 
-import com.acme.credvarejo.Cliente;
-import com.acme.credvarejo.ContaCrediario;
-import com.acme.credvarejo.Cpf;
-import com.acme.credvarejo.IdentificadorContaCrediario;
-import com.acme.credvarejo.RepositorioContaCrediario;
+import com.acme.credvarejo.ado.conta.RepositorioContaCrediario;
+import com.acme.credvarejo.cliente.Cliente;
+import com.acme.credvarejo.cliente.Cpf;
+import com.acme.credvarejo.conta.ContaCrediario;
+import com.acme.credvarejo.conta.IdentificadorContaCrediario;
 
 public class TestRepositorioContaCrediario {
 
@@ -28,7 +28,7 @@ public class TestRepositorioContaCrediario {
 		System.out.println(
 			r.getConta(new IdentificadorContaCrediario(987654)));
 
-		r.removeConta(conta);
+		r.removeConta(identificador);
 
 		System.out.println(r.getContas().length);
 	}

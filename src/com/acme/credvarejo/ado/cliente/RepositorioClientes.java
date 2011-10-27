@@ -1,8 +1,11 @@
-package com.acme.credvarejo;
+package com.acme.credvarejo.ado.cliente;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import com.acme.credvarejo.cliente.Cliente;
+import com.acme.credvarejo.cliente.Cpf;
 
 public class RepositorioClientes {
 
@@ -37,11 +40,13 @@ public class RepositorioClientes {
 		return clientes;
 	}
 
-	public void removeCliente(Cliente cliente) {
+	public void removeCliente(Cpf cpf) {
 		List<Cliente> list = new ArrayList<Cliente>(
 			Arrays.asList(getClientes()));
 
-		if (getCliente(cliente.getCpf()) != null) {
+		Cliente cliente = getCliente(cpf);
+
+		if (cliente != null) {
 			list.remove(cliente);
 		}
 

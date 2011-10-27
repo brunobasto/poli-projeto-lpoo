@@ -1,8 +1,9 @@
 package com.acme.credvarejo.conta;
 
+import com.acme.credvarejo.classesGerais.Identificavel;
 import com.acme.credvarejo.cliente.Cliente;
 
-public class ContaCrediario {
+public class ContaCrediario extends Identificavel {
 
 	private boolean ativa;
 
@@ -38,6 +39,13 @@ public class ContaCrediario {
 
 	public void efetuarPagamento(double pagamento) {
 		this.saldoDevido -= pagamento;
+	}
+
+	@Override
+	public String getChave() {
+		IdentificadorContaCrediario identificador = getIdentificador();
+
+		return String.valueOf(identificador.getNumero());
 	}
 
 	public Cliente getCliente() {

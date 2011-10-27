@@ -1,63 +1,36 @@
 package com.acme.credvarejo.ado.conta;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import com.acme.credvarejo.classesGerais.RepositorioIdentificaveis;
 import com.acme.credvarejo.conta.ContaCrediario;
 import com.acme.credvarejo.conta.IdentificadorContaCrediario;
 
 public class RepositorioContaCrediario {
 
-	private ContaCrediario[] contas;
+	private RepositorioIdentificaveis repositorio;
 
 	public RepositorioContaCrediario() {
-		this.contas = new ContaCrediario[] {};
+		this.repositorio = new RepositorioIdentificaveis();
 	}
 
 	public void addConta(ContaCrediario conta) {
-		List<ContaCrediario> list = new ArrayList<ContaCrediario>(
-			Arrays.asList(getContas()));
-		
-		if (contas.length < 150) {
-			list.add(conta);
-		}
-
-		this.contas = list.toArray(new ContaCrediario[] {});
+		repositorio.add(conta);
 	}
 
 	public ContaCrediario getConta(IdentificadorContaCrediario identificador) {
-		return getConta(identificador.getNumero());
+		return (ContaCrediario)repositorio.get(
+			String.valueOf(identificador.getNumero()));
 	}
 
 	public ContaCrediario getConta(long identificador) {
-		for (int i = 0; i < contas.length; i++) {
-			IdentificadorContaCrediario curIdentificador =
-				contas[i].getIdentificador();
-
-			if (curIdentificador.getNumero() == identificador) {
-				return contas[i];
-			}
-		}
-
-		return null;
+		return (ContaCrediario)repositorio.get(String.valueOf(identificador));
 	}
 
 	public ContaCrediario[] getContas() {
-		return contas;
+		return (ContaCrediario[])repositorio.getAll();
 	}
 
 	public void removeConta(IdentificadorContaCrediario identificador) {
-		List<ContaCrediario> list = new ArrayList<ContaCrediario>(
-			Arrays.asList(getContas()));
-
-		ContaCrediario conta = getConta(identificador);
-
-		if (conta != null) {
-			list.remove(conta);
-		}
-
-		this.contas = list.toArray(new ContaCrediario[] {});
+		repositorio.remove(String.valueOf(identificador.getNumero()));
 	}
 
 }

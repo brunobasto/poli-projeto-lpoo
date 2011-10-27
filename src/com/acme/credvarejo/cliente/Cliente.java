@@ -2,7 +2,9 @@ package com.acme.credvarejo.cliente;
 
 import java.util.Date;
 
-public class Cliente {
+import com.acme.credvarejo.classesGerais.Identificavel;
+
+public class Cliente extends Identificavel {
 
 	private Cpf cpf;
 
@@ -31,6 +33,13 @@ public class Cliente {
 
 	public boolean equals(Cliente cliente) {
 		return getCpf().equals(cliente.getCpf());
+	}
+
+	@Override
+	public String getChave() {
+		Cpf cpf = getCpf();
+
+		return cpf.getNumero();
 	}
 
 	public Date getClienteDesde() {

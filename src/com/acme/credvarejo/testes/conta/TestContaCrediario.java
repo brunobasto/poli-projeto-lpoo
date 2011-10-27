@@ -15,7 +15,8 @@ public class TestContaCrediario {
 		
 		Cliente cliente = new Cliente(cpf, "Bruno Basto", 22, 360, 0);
 
-		ContaCrediario conta = new ContaCrediario(identificador, cliente, 2000, 10);
+		ContaCrediario conta = new ContaCrediario(
+			identificador, cliente, 2000, 10);
 		
 		System.out.println(conta.getVencimento());
 	}

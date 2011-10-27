@@ -2,29 +2,29 @@ package com.acme.credvarejo.conta;
 
 import java.util.Date;
 
+import com.acme.credvarejo.classesGerais.Identificavel;
 import com.acme.credvarejo.cliente.Cliente;
 
-public class MovimentoCrediario {
+public class MovimentoCrediario extends Identificavel {
 	
 	private ContaCrediario conta;
 
 	private double valor;
 
-	private int tipo;
-
 	private Date data;
 
-	public static final int TIPO_CREDITO = 0;
-
-	public static final int TIPO_DEBITO = 1;
-
-	public MovimentoCrediario(
-		ContaCrediario conta, double valor, int tipo, Date data) {
-
+	public MovimentoCrediario(ContaCrediario conta, double valor, Date data) {
 		this.conta = conta;
 		this.data = data;
-		this.tipo = tipo;
 		this.valor = valor;
+	}
+
+	@Override
+	public String getChave() {
+		ContaCrediario conta = getConta();
+		Date data = getData();
+
+		return conta.getChave() + data.toString();
 	}
 
 	public ContaCrediario getConta() {
@@ -54,10 +54,6 @@ public class MovimentoCrediario {
 		return sb.toString();
 	}
 
-	public int getTipo() {
-		return tipo;
-	}
-
 	public double getValor() {
 		return valor;
 	}
@@ -68,10 +64,6 @@ public class MovimentoCrediario {
 
 	public void setData(Date data) {
 		this.data = data;
-	}
-
-	public void setTipo(int tipo) {
-		this.tipo = tipo;
 	}
 
 	public void setValor(double valor) {

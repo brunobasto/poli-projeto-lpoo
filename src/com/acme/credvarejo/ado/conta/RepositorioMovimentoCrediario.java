@@ -1,32 +1,22 @@
 package com.acme.credvarejo.ado.conta;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import com.acme.credvarejo.classesGerais.RepositorioIdentificaveis;
 import com.acme.credvarejo.conta.MovimentoCrediario;
 
 public class RepositorioMovimentoCrediario {
 
-	private MovimentoCrediario[] movimentos;
+	private RepositorioIdentificaveis repositorio;
 
 	public RepositorioMovimentoCrediario() {
-		this.movimentos = new MovimentoCrediario[] {};
+		this.repositorio = new RepositorioIdentificaveis();
 	}
 
-	public void addMovimento(MovimentoCrediario conta) {
-		List<MovimentoCrediario> list = new ArrayList<MovimentoCrediario>(
-			Arrays.asList(getMovimentos()));
-
-		if (movimentos.length < 150) {
-			list.add(conta);
-		}
-
-		this.movimentos = list.toArray(new MovimentoCrediario[] {});
+	public void addMovimento(MovimentoCrediario movimento) {
+		repositorio.add(movimento);
 	}
 
 	public MovimentoCrediario[] getMovimentos() {
-		return movimentos;
+		return (MovimentoCrediario[])repositorio.getAll();
 	}
 
 }

@@ -18,10 +18,11 @@ public class TestMovimentoCrediario {
 		
 		Cliente cliente = new Cliente(cpf, "Bruno Basto", 22, 360, 0);
 
-		ContaCrediario conta = new ContaCrediario(identificador, cliente, 2000, 10);
+		ContaCrediario conta = new ContaCrediario(
+			identificador, cliente, 2000, 10);
 		
 		MovimentoCrediario movimento = new MovimentoCrediario(
-			conta, 500, 1, new Date());
+			conta, 500, new Date());
 		
 		System.out.println(movimento.getNomeExtrato());
 	}

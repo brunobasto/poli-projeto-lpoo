@@ -49,7 +49,7 @@ public class ControladorContaCrediario {
 		conta.efetuarPagamento(valor);
 
 		MovimentoCrediario movimento = new MovimentoCrediario(
-			conta, valor, MovimentoCrediario.TIPO_CREDITO, new Date());
+			conta, valor, new Date());
 
 		controladorMovimentoCrediario.inserir(movimento);
 	}
@@ -70,7 +70,7 @@ public class ControladorContaCrediario {
 			conta.efetuarCompra(valor);
 
 			MovimentoCrediario movimento = new MovimentoCrediario(
-				conta, valor, MovimentoCrediario.TIPO_DEBITO, new Date());
+				conta, valor, new Date());
 
 			controladorMovimentoCrediario.inserir(movimento);
 		}

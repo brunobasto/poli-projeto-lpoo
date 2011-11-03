@@ -5,6 +5,7 @@ import java.util.Arrays;
 import com.acme.credvarejo.classesGerais.Identificador;
 import com.acme.credvarejo.classesGerais.Registro;
 import com.acme.credvarejo.classesGerais.RepositorioIdentificaveis;
+import com.acme.credvarejo.classesGerais.exceptions.NoSuchRegistroException;
 import com.acme.credvarejo.cliente.Cliente;
 
 public class RepositorioClientesImpl implements RepositorioClientes {
@@ -19,7 +20,9 @@ public class RepositorioClientesImpl implements RepositorioClientes {
 		repositorio.add(cliente);
 	}
 
-	public Cliente get(Identificador identificador) {
+	public Cliente get(Identificador identificador)
+		throws NoSuchRegistroException {
+
 		return (Cliente)repositorio.get(identificador.getNumero());
 	}
 
@@ -31,8 +34,16 @@ public class RepositorioClientesImpl implements RepositorioClientes {
 		return Arrays.copyOf(registros, registros.length, clientes.getClass());
 	}
 
-	public void remove(Identificador identificador) {
+	public void remove(Identificador identificador)
+		throws NoSuchRegistroException {
+
 		repositorio.remove(identificador.getNumero());
+	}
+	
+	public void update(Identificador identificador, Cliente cliente)
+		throws NoSuchRegistroException {
+
+		repositorio.update(identificador.getNumero(), cliente);
 	}
 
 }

@@ -7,13 +7,13 @@ import java.io.InputStreamReader;
 import com.acme.credvarejo.ado.cliente.RepositorioClientesImpl;
 import com.acme.credvarejo.ado.conta.RepositorioContaCrediarioImpl;
 import com.acme.credvarejo.ado.conta.RepositorioMovimentoCrediarioImpl;
+import com.acme.credvarejo.classesGerais.exceptions.NoSuchRegistroException;
 import com.acme.credvarejo.cliente.Cliente;
 import com.acme.credvarejo.cliente.ControladorCliente;
 import com.acme.credvarejo.cliente.Cpf;
 import com.acme.credvarejo.cliente.exceptions.ClienteException;
 import com.acme.credvarejo.cliente.exceptions.CpfException;
 import com.acme.credvarejo.cliente.exceptions.IdadeException;
-import com.acme.credvarejo.cliente.exceptions.NoSuchClienteException;
 import com.acme.credvarejo.cliente.exceptions.NomeException;
 import com.acme.credvarejo.cliente.exceptions.RendaException;
 import com.acme.credvarejo.cliente.exceptions.SexoException;
@@ -36,87 +36,6 @@ public class Main {
 	
 	private static final ControladorMovimentoCrediario controladorMovimentoCrediario =
 		new ControladorMovimentoCrediario(new RepositorioMovimentoCrediarioImpl());
-
-	private static void addCliente(BufferedReader reader) throws Exception {
-		System.out.print("Digite o número do CPF (sem o dígito): ");
-		String numero = reader.readLine();
-
-		System.out.print("Digite o digito do CPF: ");
-		String digito = reader.readLine();
-
-		Cpf cpf = new Cpf(numero, digito);
-
-		System.out.print("Digite o Nome do cliente: ");
-		String nome = reader.readLine();
-
-		System.out.print("Digite a Idade do cliente: ");
-		int idade = readInteger(reader);
-
-		System.out.print("Digite a Renda do cliente: ");
-		double renda = readDouble(reader);
-
-		System.out.print("Digite o Sexo do cliente (0 - Masc, 1 - Fem): ");
-		int sexo = readInteger(reader);
-
-		Cliente cliente = new Cliente(cpf, nome, idade, renda, sexo);
-		
-		System.out.print("Digite o Limite de Crédito do cliente: ");
-		double limiteDeCredito = readDouble(reader);
-
-		System.out.print("Digite o dia de vencimento da fatura do cliente: ");
-		int vencimento = readInteger(reader);
-
-		try {
-			controladorCliente.incluir(cliente);
-			controladorContaCrediario.inserir(
-				cliente, limiteDeCredito, vencimento);
-		}
-		catch (ClienteException ce) {
-			if (ce instanceof CpfException) {
-				System.out.println("Erro: Cpf inválido.");
-			}
-			else if (ce instanceof NomeException) {
-				System.out.println("Erro: Nome inválido.");
-			}
-			else if (ce instanceof IdadeException) {
-				System.out.println("Erro: Idade inválida.");
-			}
-			else if (ce instanceof RendaException) {
-				System.out.println("Erro: Renda inválida.");
-			}
-			else if (ce instanceof SexoException) {
-				System.out.println("Erro: Sexo inválido.");
-			}
-
-			if (backOrRepeat(reader)) {
-				addCliente(reader);
-			}
-			else {
-				showMainMenu(reader);
-			}
-		}
-		catch (ContaCrediarioException cce) {
-			if (cce instanceof VencimentoException) {
-				System.out.println("Erro: Vencimento inválido.");
-			}
-
-			if (backOrRepeat(reader)) {
-				addCliente(reader);
-			}
-			else {
-				showMainMenu(reader);
-			}
-		}
-
-		System.out.println("\nCliente cadastrado com sucesso!\n");
-		
-		if (backOrRepeat(reader)) {
-			addCliente(reader);
-		}
-		else {
-			showMainMenu(reader);
-		}
-	}
 
 	private static boolean backOrRepeat(BufferedReader reader)
 		throws IOException {
@@ -237,10 +156,6 @@ public class Main {
 		}
 	}
 
-	private static void editCliente() {
-
-	}
-	
 	public static void main(String[] args) {
 		BufferedReader reader = new BufferedReader(
 			new InputStreamReader(System.in));
@@ -251,7 +166,7 @@ public class Main {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private static double readDouble(BufferedReader reader) throws IOException {
 		double value = 0;
 
@@ -298,7 +213,7 @@ public class Main {
 			showMainMenu(reader);
 		}
 	}
-
+	
 	private static void searchCliente(BufferedReader reader)
 		throws Exception {
 
@@ -315,9 +230,9 @@ public class Main {
 		try {
 			cliente = controladorCliente.buscar(cpf);
 		}
-		catch (NoSuchClienteException e) {
-			System.out.println("\n" + e.getMessage() + "\n");
-			
+		catch (NoSuchRegistroException nsre) {
+			System.out.println("\n" + nsre.getMessage() + "\n");
+
 			if (backOrRepeat(reader)) {
 				searchCliente(reader);
 			}
@@ -337,7 +252,7 @@ public class Main {
 			showMainMenu(reader);
 		}
 	}
-	
+
 	private static void showCliente(Cliente cliente) {
 		System.out.println("\nNome: " + cliente.getNome());
 		System.out.println("Idade: " + cliente.getIdade());
@@ -353,7 +268,19 @@ public class Main {
 		else {
 			System.out.println("Feminino");
 		}
-		
+
+		try {
+			ContaCrediario contaCrediario = controladorContaCrediario.buscar(
+				new IdentificadorContaCrediario(cliente.getChave()));
+
+			System.out.println(
+				"Limite de Crédito: " + contaCrediario.getLimiteDeCredito());
+			System.out.println(
+				"Dia do Vencimento: " + contaCrediario.getVencimento());
+		} catch (NoSuchRegistroException e) {
+			System.out.println("\nEste cliente não possui conta.");
+		}
+
 		System.out.println("\n");
 	}
 
@@ -369,7 +296,7 @@ public class Main {
 				System.out.println(
 					cliente.getChave() + " - " + cliente.getNome());
 			}
-			
+
 			System.out.println("\n");
 		}
 		else {
@@ -393,9 +320,9 @@ public class Main {
 			try {
 				cliente = controladorCliente.buscar(cpf);
 			}
-			catch (NoSuchClienteException e) {
-				System.out.println("\n" + e.getMessage() + "\n");
-				
+			catch (NoSuchRegistroException nsre) {
+				System.out.println("\n" + nsre.getMessage() + "\n");
+
 				if (backOrRepeat(reader)) {
 					showExtratoCliente(reader);
 				}
@@ -473,10 +400,10 @@ public class Main {
 		while (option < 1 || option > index);
 		
 		if (option == 1) {
-			addCliente(reader);
+			updateCliente(reader);
 		}
 		else if (option == 2) {
-			editCliente();
+			updateCliente(reader);
 		}
 		else if (option == 3) {
 			deleteCliente(reader);
@@ -540,6 +467,92 @@ public class Main {
 
 		if (backOrRepeat(reader)) {
 			transferir(reader);
+		}
+		else {
+			showMainMenu(reader);
+		}
+	}
+
+	private static void updateCliente(BufferedReader reader) throws Exception {
+		System.out.print("Digite o número do CPF (sem o dígito): ");
+		String numero = reader.readLine();
+
+		System.out.print("Digite o digito do CPF: ");
+		String digito = reader.readLine();
+
+		Cpf cpf = new Cpf(numero, digito);
+
+		System.out.print("Digite o Nome do cliente: ");
+		String nome = reader.readLine();
+
+		System.out.print("Digite a Idade do cliente: ");
+		int idade = readInteger(reader);
+
+		System.out.print("Digite a Renda do cliente: ");
+		double renda = readDouble(reader);
+
+		System.out.print("Digite o Sexo do cliente (0 - Masc, 1 - Fem): ");
+		int sexo = readInteger(reader);
+
+		Cliente cliente = new Cliente(cpf, nome, idade, renda, sexo);
+
+		System.out.print("Digite o Limite de Crédito do cliente: ");
+		double limiteDeCredito = readDouble(reader);
+
+		System.out.print("Digite o dia de vencimento da fatura do cliente: ");
+		int vencimento = readInteger(reader);
+
+		try {
+			controladorCliente.alterar(cliente);
+			controladorContaCrediario.alterar(
+				cliente, limiteDeCredito, vencimento);
+		}
+		catch (NoSuchRegistroException nsre) {
+			controladorCliente.incluir(cliente);
+			controladorContaCrediario.inserir(
+				cliente, limiteDeCredito, vencimento);
+		}
+		catch (ClienteException ce) {
+			if (ce instanceof CpfException) {
+				System.out.println("Erro: Cpf inválido.");
+			}
+			else if (ce instanceof NomeException) {
+				System.out.println("Erro: Nome inválido.");
+			}
+			else if (ce instanceof IdadeException) {
+				System.out.println("Erro: Idade inválida.");
+			}
+			else if (ce instanceof RendaException) {
+				System.out.println("Erro: Renda inválida.");
+			}
+			else if (ce instanceof SexoException) {
+				System.out.println("Erro: Sexo inválido.");
+			}
+
+			if (backOrRepeat(reader)) {
+				updateCliente(reader);
+			}
+			else {
+				showMainMenu(reader);
+			}
+		}
+		catch (ContaCrediarioException cce) {
+			if (cce instanceof VencimentoException) {
+				System.out.println("Erro: Vencimento inválido.");
+			}
+
+			if (backOrRepeat(reader)) {
+				updateCliente(reader);
+			}
+			else {
+				showMainMenu(reader);
+			}
+		}
+
+		System.out.println("\nCliente salvo com sucesso!\n");
+		
+		if (backOrRepeat(reader)) {
+			updateCliente(reader);
 		}
 		else {
 			showMainMenu(reader);

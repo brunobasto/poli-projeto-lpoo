@@ -1,6 +1,7 @@
 package com.acme.credvarejo.testes.conta;
 
 import com.acme.credvarejo.ado.conta.RepositorioContaCrediarioImpl;
+import com.acme.credvarejo.classesGerais.exceptions.NoSuchRegistroException;
 import com.acme.credvarejo.cliente.Cliente;
 import com.acme.credvarejo.cliente.Cpf;
 import com.acme.credvarejo.conta.ContaCrediario;
@@ -24,13 +25,17 @@ public class TestRepositorioContaCrediario {
 		r.add(conta);
 
 		// Retorna o conta
-		System.out.println(r.get(identificador));
-		
-		// Retorna null - Nao Achou
-		System.out.println(
-			r.get(new IdentificadorContaCrediario("987654")));
+		try {
+			System.out.println(r.get(identificador));
 
-		r.remove(identificador);
+			// Retorna null - Nao Achou
+			System.out.println(
+				r.get(new IdentificadorContaCrediario("987654")));
+			
+			r.remove(identificador);
+		} catch (NoSuchRegistroException e) {
+			e.printStackTrace();
+		}
 
 		ContaCrediario[] contas = (ContaCrediario[])r.getAll();
 

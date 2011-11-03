@@ -22,6 +22,14 @@ public class RepositorioMovimentoCrediarioImpl
 		repositorio.add(movimentoCrediario);
 	}
 
+	public MovimentoCrediario[] getAll() {
+		Registro[] registros = repositorio.getAll();
+
+		MovimentoCrediario[] clientes = new MovimentoCrediario[registros.length];
+
+		return Arrays.copyOf(registros, registros.length, clientes.getClass());
+	}
+
 	public MovimentoCrediario[] search(Identificador identificador) {
 		ArrayList<MovimentoCrediario> movimentos =
 			new ArrayList<MovimentoCrediario>();
@@ -37,14 +45,6 @@ public class RepositorioMovimentoCrediarioImpl
 		}
 
 		return movimentos.toArray(new MovimentoCrediario[] {});
-	}
-
-	public MovimentoCrediario[] getAll() {
-		Registro[] registros = repositorio.getAll();
-
-		MovimentoCrediario[] clientes = new MovimentoCrediario[registros.length];
-
-		return Arrays.copyOf(registros, registros.length, clientes.getClass());
 	}
 
 }

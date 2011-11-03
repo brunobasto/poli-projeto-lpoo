@@ -13,6 +13,12 @@ public class ControladorMovimentoCrediario {
 		this.repositorioMovimentoCrediario = repositorioMovimentoCrediario;
 	}
 
+	public MovimentoCrediario[] buscar(
+		IdentificadorContaCrediario identificador) {
+
+		return repositorioMovimentoCrediario.search(identificador);
+	}
+
 	public void inserir(MovimentoCrediario movimentoCrediario)
 		throws ContaCrediarioException {
 
@@ -24,12 +30,6 @@ public class ControladorMovimentoCrediario {
 		else {
 			System.err.println("O movimento crediário passado não existe.");
 		}
-	}
-
-	public MovimentoCrediario[] buscar(
-		IdentificadorContaCrediario identificador) {
-
-		return repositorioMovimentoCrediario.search(identificador);
 	}
 
 }

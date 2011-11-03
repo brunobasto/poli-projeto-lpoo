@@ -3,6 +3,8 @@ package com.acme.credvarejo.conta;
 import java.util.Date;
 
 import com.acme.credvarejo.ado.conta.RepositorioContaCrediario;
+import com.acme.credvarejo.classesGerais.Identificador;
+import com.acme.credvarejo.classesGerais.exceptions.NoSuchRegistroException;
 import com.acme.credvarejo.cliente.Cliente;
 import com.acme.credvarejo.cliente.Cpf;
 import com.acme.credvarejo.conta.exceptions.ContaCrediarioException;
@@ -14,12 +16,26 @@ public class ControladorContaCrediario {
 	public ControladorContaCrediario(RepositorioContaCrediario repositorioContas) {
 		this.repositorioContas = repositorioContas;
 	}
-	
-	public void alterar(ContaCrediario conta) {
+
+	public void alterar(
+			Cliente cliente, double limiteDeCredito, int vencimento)
+		throws ContaCrediarioException, NoSuchRegistroException {
 		
+		Identificador identificador = cliente.getCpf();
+
+		ContaCrediario contaCrediario = repositorioContas.get(identificador);
+		
+		contaCrediario.setLimiteDeCredito(limiteDeCredito);
+		contaCrediario.setVencimento(vencimento);
+
+		contaCrediario.validar();
+
+		repositorioContas.update(identificador, contaCrediario);
 	}
 
-	public ContaCrediario buscar(IdentificadorContaCrediario identificador) {
+	public ContaCrediario buscar(IdentificadorContaCrediario identificador)
+		throws NoSuchRegistroException {
+
 		if (identificador != null) {
 			return repositorioContas.get(identificador);
 		}
@@ -36,7 +52,7 @@ public class ControladorContaCrediario {
 	public void creditar(
 			IdentificadorContaCrediario identificador, double valor,
 			ControladorMovimentoCrediario controladorMovimentoCrediario)
-		throws ContaCrediarioException {
+		throws ContaCrediarioException, NoSuchRegistroException {
 
 		if (identificador == null) {
 			System.err.println("O identificador passado não existe.");
@@ -63,7 +79,7 @@ public class ControladorContaCrediario {
 	public void debitar(
 			IdentificadorContaCrediario identificador, double valor,
 			ControladorMovimentoCrediario controladorMovimentoCrediario)
-		throws ContaCrediarioException {
+		throws ContaCrediarioException, NoSuchRegistroException {
 
 		if (identificador == null) {
 			System.err.println("O identificador passado não existe.");
@@ -89,7 +105,9 @@ public class ControladorContaCrediario {
 		}
 	}
 
-	public void excluir(IdentificadorContaCrediario identificador) {
+	public void excluir(IdentificadorContaCrediario identificador)
+		throws NoSuchRegistroException {
+
 		if (identificador != null) {
 			repositorioContas.remove(identificador);
 		}

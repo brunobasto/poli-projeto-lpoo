@@ -8,8 +8,8 @@ public interface RepositorioMovimentoCrediario {
 
 	public void add(MovimentoCrediario movimentoCrediario);
 	
-	public MovimentoCrediario[] search(Identificador identificador);
-
 	public Registro[] getAll();
+
+	public MovimentoCrediario[] search(Identificador identificador);
 
 }

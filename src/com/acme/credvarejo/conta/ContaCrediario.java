@@ -1,8 +1,9 @@
 package com.acme.credvarejo.conta;
 
 import com.acme.credvarejo.classesGerais.Registro;
+import com.acme.credvarejo.classesGerais.exceptions.NoSuchRegistroException;
 import com.acme.credvarejo.cliente.Cliente;
-import com.acme.credvarejo.conta.exceptions.ClienteException;
+import com.acme.credvarejo.conta.exceptions.ContaCrediarioException;
 import com.acme.credvarejo.conta.exceptions.IdentificadorException;
 import com.acme.credvarejo.conta.exceptions.SaldoException;
 import com.acme.credvarejo.conta.exceptions.VencimentoException;
@@ -120,14 +121,16 @@ public class ContaCrediario extends Registro {
 	}
 
 	@Override
-	public void validar() throws Exception {
+	public void validar()
+		throws ContaCrediarioException, NoSuchRegistroException {
+
 		if (getIdentificador() == null) {
 			throw new IdentificadorException(
 				"O identificador não pode ser nulo.");
 		}
 
 		if (getCliente() == null) {
-			throw new ClienteException("O cliente não pode ser nulo.");
+			throw new NoSuchRegistroException("O cliente não pode ser nulo.");
 		}
 
 		if (getSaldoDevido() < 0) {

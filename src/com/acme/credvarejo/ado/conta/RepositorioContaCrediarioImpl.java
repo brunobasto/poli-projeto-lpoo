@@ -5,9 +5,11 @@ import java.util.Arrays;
 import com.acme.credvarejo.classesGerais.Identificador;
 import com.acme.credvarejo.classesGerais.Registro;
 import com.acme.credvarejo.classesGerais.RepositorioIdentificaveis;
+import com.acme.credvarejo.classesGerais.exceptions.NoSuchRegistroException;
 import com.acme.credvarejo.conta.ContaCrediario;
 
-public class RepositorioContaCrediarioImpl implements RepositorioContaCrediario {
+public class RepositorioContaCrediarioImpl
+	implements RepositorioContaCrediario {
 
 	private RepositorioIdentificaveis repositorio;
 
@@ -19,7 +21,9 @@ public class RepositorioContaCrediarioImpl implements RepositorioContaCrediario 
 		repositorio.add(contaCrediario);
 	}
 
-	public ContaCrediario get(Identificador identificador) {
+	public ContaCrediario get(Identificador identificador)
+		throws NoSuchRegistroException {
+
 		return (ContaCrediario)repositorio.get(identificador.getNumero());
 	}
 
@@ -31,8 +35,17 @@ public class RepositorioContaCrediarioImpl implements RepositorioContaCrediario 
 		return Arrays.copyOf(registros, registros.length, clientes.getClass());
 	}
 
-	public void remove(Identificador identificador) {
+	public void remove(Identificador identificador)
+		throws NoSuchRegistroException {
+
 		repositorio.remove(identificador.getNumero());
+	}
+	
+	public void update(
+			Identificador identificador, ContaCrediario contaCrediario)
+		throws NoSuchRegistroException {
+
+		repositorio.update(identificador.getNumero(), contaCrediario);
 	}
 
 }

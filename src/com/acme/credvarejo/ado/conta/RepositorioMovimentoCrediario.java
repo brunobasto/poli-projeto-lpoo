@@ -1,22 +1,15 @@
 package com.acme.credvarejo.ado.conta;
 
-import com.acme.credvarejo.classesGerais.RepositorioIdentificaveis;
+import com.acme.credvarejo.classesGerais.Identificador;
+import com.acme.credvarejo.classesGerais.Registro;
 import com.acme.credvarejo.conta.MovimentoCrediario;
 
-public class RepositorioMovimentoCrediario {
+public interface RepositorioMovimentoCrediario {
 
-	private RepositorioIdentificaveis repositorio;
+	public void add(MovimentoCrediario movimentoCrediario);
+	
+	public MovimentoCrediario[] search(Identificador identificador);
 
-	public RepositorioMovimentoCrediario() {
-		this.repositorio = new RepositorioIdentificaveis();
-	}
-
-	public void addMovimento(MovimentoCrediario movimento) {
-		repositorio.add(movimento);
-	}
-
-	public MovimentoCrediario[] getMovimentos() {
-		return (MovimentoCrediario[])repositorio.getAll();
-	}
+	public Registro[] getAll();
 
 }

@@ -13,9 +13,9 @@ public class TestMovimentoCrediarioCredito {
 
 	public static void main(String[] args) {
 		IdentificadorContaCrediario identificador =
-			new IdentificadorContaCrediario(123456);
+			new IdentificadorContaCrediario("123456");
 
-		Cpf cpf = new Cpf("054377074");
+		Cpf cpf = new Cpf("054377074", "52");
 		
 		Cliente cliente = new Cliente(cpf, "Bruno Basto", 22, 360, 0);
 
@@ -24,8 +24,6 @@ public class TestMovimentoCrediarioCredito {
 		
 		MovimentoCrediario movimento = new MovimentoCrediarioCredito(
 			conta, 500, new Date());
-		
-		System.out.println(movimento.getNomeExtrato());
 		
 		System.out.println(movimento instanceof MovimentoCrediario);
 	}

@@ -1,6 +1,8 @@
 package com.acme.credvarejo.cliente;
 
 import com.acme.credvarejo.ado.cliente.RepositorioClientes;
+import com.acme.credvarejo.cliente.exceptions.ClienteException;
+import com.acme.credvarejo.cliente.exceptions.NoSuchClienteException;
 
 public class ControladorCliente {
 
@@ -13,33 +15,39 @@ public class ControladorCliente {
 	public void alterar(Cliente cliente) {
 		
 	} 
-	
-	public Cliente buscar(Cpf cpf) {
+
+	public Cliente buscar(Cpf cpf) throws NoSuchClienteException {
+		Cliente cliente = null;
+
 		if (cpf != null) {
-			return repositorioClientes.getCliente(cpf);
+			cliente = repositorioClientes.get(cpf);
 		}
 
-		System.err.println("Este cliente não existe.");
+		if (cliente == null) {
+			throw new NoSuchClienteException("Este cliente não existe.");
+		}
 
-		return null;
+		return cliente;
 	}
-	
+
 	public Cliente[] buscarTodos() {
-		return repositorioClientes.getClientes();
+		return repositorioClientes.getAll();
 	}
 
-	public void excluir(Cpf cpf) {
+	public void excluir(Cpf cpf) throws NoSuchClienteException {
 		if (cpf != null) {
-			repositorioClientes.removeCliente(cpf);
+			repositorioClientes.remove(cpf);
 		}
 		else {
-			System.err.println("Este cliente não existe.");
+			throw new NoSuchClienteException("Este cliente não existe.");
 		}
 	}
 
-	public void incluir(Cliente cliente) {
+	public void incluir(Cliente cliente) throws ClienteException {
 		if (cliente != null) {
-			repositorioClientes.addCliente(cliente);
+			cliente.validar();
+			
+			repositorioClientes.add(cliente);
 		}
 		else {
 			System.err.println("Este cliente não existe.");

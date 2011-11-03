@@ -1,18 +1,18 @@
 package com.acme.credvarejo.cliente;
 
-public class Cpf {
+import com.acme.credvarejo.classesGerais.Identificador;
 
+public class Cpf extends Identificador {
+
+	private String digito;
 	private String numero;
 	
-	public Cpf(String numero) {
+	public Cpf(String numero, String digito) {
+		this.digito = digito;
 		this.numero = numero;
 	}
 
-	public boolean equals(Cpf cpf) {
-		return getNumero().equals(cpf.getNumero());
-	}
-
-	public String getDigito() {
+	protected String calcularDigito() {
 		int primeiroDigito = 0;
 		int segundoDigito = 0;
 
@@ -54,17 +54,25 @@ public class Cpf {
 
 		return String.valueOf(primeiroDigito) + String.valueOf(segundoDigito);
 	}
+	
+	public String getDigito() {
+		return digito;
+	}
 
 	public String getNumero() {
 		return numero;
+	}
+	
+	public void setDigito(String digito) {
+		this.digito = digito;
 	}
 
 	public void setNumero(String numero) {
 		this.numero = numero;
 	}
 
-	public boolean validarDigito(String digito) {
-		return digito.equals(getDigito());
+	public boolean verificarDigito() {
+		return getDigito().equals(calcularDigito());
 	}
-	
+
 }

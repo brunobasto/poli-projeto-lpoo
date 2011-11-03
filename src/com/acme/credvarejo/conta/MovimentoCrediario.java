@@ -2,10 +2,13 @@ package com.acme.credvarejo.conta;
 
 import java.util.Date;
 
-import com.acme.credvarejo.classesGerais.Identificavel;
+import com.acme.credvarejo.classesGerais.Registro;
 import com.acme.credvarejo.cliente.Cliente;
+import com.acme.credvarejo.conta.exceptions.ContaCrediarioException;
+import com.acme.credvarejo.conta.exceptions.DataException;
+import com.acme.credvarejo.conta.exceptions.ValorException;
 
-public class MovimentoCrediario extends Identificavel {
+public abstract class MovimentoCrediario extends Registro {
 	
 	private ContaCrediario conta;
 
@@ -35,25 +38,6 @@ public class MovimentoCrediario extends Identificavel {
 		return data;
 	}
 
-	public String getNomeExtrato() {
-		Cliente cliente = conta.getCliente();
-
-		StringBuffer sb = new StringBuffer(4);
-
-		sb.append(cliente.getPrimeiroNome());
-		sb.append(", ");
-		sb.append(cliente.getUltimoNome());
-
-		if (cliente.getSexo() == 0) {
-			sb.append(" MR.");
-		}
-		else {
-			sb.append(" MRS.");
-		}
-
-		return sb.toString();
-	}
-
 	public double getValor() {
 		return valor;
 	}
@@ -68,6 +52,22 @@ public class MovimentoCrediario extends Identificavel {
 
 	public void setValor(double valor) {
 		this.valor = valor;
+	}
+	
+	@Override
+	public void validar() throws ContaCrediarioException {
+		if (getConta() == null) {
+			throw new ContaCrediarioException("A conta não pode ser nula.");
+		}
+		
+		if (getValor() <= 0) {
+			throw new ValorException(
+				"O valor da trasação não pode ser negativo ou igual a 0.");
+		}
+		
+		if (getData() == null) {
+			throw new DataException("A data não pode ser nula.");
+		}
 	}
 
 }

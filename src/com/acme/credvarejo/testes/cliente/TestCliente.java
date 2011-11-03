@@ -6,7 +6,7 @@ import com.acme.credvarejo.cliente.Cpf;
 public class TestCliente {
 
 	public static void main(String[] args) {
-		Cpf cpf = new Cpf("054377074");
+		Cpf cpf = new Cpf("054377074", "52");
 		
 		Cliente cliente = new Cliente(cpf, "Bruno Basto", 22, 360, 0);
 		

@@ -1,36 +1,45 @@
 package com.acme.credvarejo.conta;
 
-public class IdentificadorContaCrediario {
+import com.acme.credvarejo.classesGerais.Identificador;
 
-	private long numero;
+public class IdentificadorContaCrediario extends Identificador {
 
-	public IdentificadorContaCrediario(long numero) {
+	private String digito;
+	private String numero;
+
+	public IdentificadorContaCrediario(String numero) {
 		this.numero = numero;
 	}
 
-	public int calcularDigitoVerificador() {
-		String numeroString = String.valueOf(this.numero);
-
+	protected String calcularDigito() {
 		int digitoVerificador = 0;
 
-		for (int i = 0; i < numeroString.length(); i++) {
+		for (int i = 0; i < numero.length(); i++) {
 			digitoVerificador += Integer.parseInt(
-				numeroString.substring(i, i+1));
+				numero.substring(i, i+1));
 		}
 
-		return digitoVerificador % 11;
+		return String.valueOf(digitoVerificador % 11);
+	}
+	
+	public String getDigito() {
+		return digito;
 	}
 
-	public long getNumero() {
+	public String getNumero() {
 		return numero;
 	}
 
-	public void setNumero(long numero) {
+	public void setDigito(String digito) {
+		this.digito = digito;
+	}
+
+	public void setNumero(String numero) {
 		this.numero = numero;
 	}
 
-	public boolean verificarValidadeDigito(int digito) {
-		return digito == calcularDigitoVerificador();
+	public boolean verificarDigito() {
+		return getDigito().equals(calcularDigito());
 	}
 
 }

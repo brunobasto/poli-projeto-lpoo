@@ -2,9 +2,15 @@ package com.acme.credvarejo.cliente;
 
 import java.util.Date;
 
-import com.acme.credvarejo.classesGerais.Identificavel;
+import com.acme.credvarejo.classesGerais.Registro;
+import com.acme.credvarejo.cliente.exceptions.ClienteException;
+import com.acme.credvarejo.cliente.exceptions.CpfException;
+import com.acme.credvarejo.cliente.exceptions.IdadeException;
+import com.acme.credvarejo.cliente.exceptions.NomeException;
+import com.acme.credvarejo.cliente.exceptions.RendaException;
+import com.acme.credvarejo.cliente.exceptions.SexoException;
 
-public class Cliente extends Identificavel {
+public class Cliente extends Registro {
 
 	private Cpf cpf;
 
@@ -100,6 +106,50 @@ public class Cliente extends Identificavel {
 	
 	public void setSexo(int sexo) {
 		this.sexo = sexo;
+	}
+
+	@Override
+	public void validar() throws ClienteException {
+		if (getCpf() == null) {
+			throw new CpfException("O C.P.F. não pode ser nulo.");
+		}
+		
+		String nome = getNome();
+		
+		if (nome == null) {
+			throw new NomeException("O nome não pode ser nulo.");
+		}
+		
+		if (nome.equals("")) {
+			throw new NomeException("O nome não pode ser em branco.");
+		}
+		
+		if (nome.length() > 60) {
+			throw new NomeException(
+				"O nome não pode ter mais do que 60 caracteres.");
+		}
+		
+		int idade = getIdade();
+		
+		if (idade < 18 || idade > 200) {
+			throw new IdadeException(
+				"A idade tem que ser maior do que 18 anos e menor que 200 " +
+				"anos.");
+		}
+		
+		double renda = getRenda();
+		
+		if (renda < 0 || renda > 1000000) {
+			throw new RendaException(
+				"A renda não pode ser menor que zero e não pode ser maior que" +
+				" R$ 1.000.000,00.");
+		}
+		
+		int sexo = getSexo();
+		
+		if (sexo != SEXO_FEMININO && sexo != SEXO_MASCULINO) {
+			throw new SexoException("O sexo deve ser Masculino ou Feminino.");
+		}
 	}
 
 }

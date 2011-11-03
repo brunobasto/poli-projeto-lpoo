@@ -1,9 +1,13 @@
 package com.acme.credvarejo.conta;
 
-import com.acme.credvarejo.classesGerais.Identificavel;
+import com.acme.credvarejo.classesGerais.Registro;
 import com.acme.credvarejo.cliente.Cliente;
+import com.acme.credvarejo.conta.exceptions.ClienteException;
+import com.acme.credvarejo.conta.exceptions.IdentificadorException;
+import com.acme.credvarejo.conta.exceptions.SaldoException;
+import com.acme.credvarejo.conta.exceptions.VencimentoException;
 
-public class ContaCrediario extends Identificavel {
+public class ContaCrediario extends Registro {
 
 	private boolean ativa;
 
@@ -40,7 +44,7 @@ public class ContaCrediario extends Identificavel {
 	public void efetuarPagamento(double pagamento) {
 		this.saldoDevido -= pagamento;
 	}
-
+	
 	@Override
 	public String getChave() {
 		IdentificadorContaCrediario identificador = getIdentificador();
@@ -58,6 +62,25 @@ public class ContaCrediario extends Identificavel {
 
 	public double getLimiteDeCredito() {
 		return limiteDeCredito;
+	}
+
+	public String getNomeExtrato() {
+		Cliente cliente = getCliente();
+
+		StringBuffer sb = new StringBuffer(4);
+
+		sb.append(cliente.getPrimeiroNome());
+		sb.append(", ");
+		sb.append(cliente.getUltimoNome());
+
+		if (cliente.getSexo() == 0) {
+			sb.append(" MR.");
+		}
+		else {
+			sb.append(" MRS.");
+		}
+
+		return sb.toString();
 	}
 
 	public double getSaldoDevido() {
@@ -94,6 +117,27 @@ public class ContaCrediario extends Identificavel {
 
 	public void setVencimento(int vencimento) {
 		this.vencimento = vencimento;
+	}
+
+	@Override
+	public void validar() throws Exception {
+		if (getIdentificador() == null) {
+			throw new IdentificadorException(
+				"O identificador não pode ser nulo.");
+		}
+
+		if (getCliente() == null) {
+			throw new ClienteException("O cliente não pode ser nulo.");
+		}
+
+		if (getSaldoDevido() < 0) {
+			throw new SaldoException("O saldo devido não pode ser negativo.");
+		}
+
+		if (getVencimento() < 1 || getVencimento() > 31) {
+			 throw new VencimentoException(
+			     "O vencimento não pode ser menor que 1 ou maior que 31.");
+		}
 	}
 
 }

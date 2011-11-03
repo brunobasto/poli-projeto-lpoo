@@ -1,24 +1,35 @@
 package com.acme.credvarejo.conta;
 
 import com.acme.credvarejo.ado.conta.RepositorioMovimentoCrediario;
+import com.acme.credvarejo.conta.exceptions.ContaCrediarioException;
 
 public class ControladorMovimentoCrediario {
 
 	private RepositorioMovimentoCrediario repositorioMovimentoCrediario;
-	
+
 	public ControladorMovimentoCrediario(
-		RepositorioMovimentoCrediario repositorioMovimentoCrediario) {
+			RepositorioMovimentoCrediario repositorioMovimentoCrediario) {
 
 		this.repositorioMovimentoCrediario = repositorioMovimentoCrediario;
 	}
-	
-	public void inserir(MovimentoCrediario movimento) {
-		if (movimento != null) {
-			repositorioMovimentoCrediario.addMovimento(movimento);
+
+	public void inserir(MovimentoCrediario movimentoCrediario)
+		throws ContaCrediarioException {
+
+		if (movimentoCrediario != null) {
+			movimentoCrediario.validar();
+
+			repositorioMovimentoCrediario.add(movimentoCrediario);
 		}
 		else {
 			System.err.println("O movimento crediário passado não existe.");
 		}
-	} 
-	
+	}
+
+	public MovimentoCrediario[] buscar(
+		IdentificadorContaCrediario identificador) {
+
+		return repositorioMovimentoCrediario.search(identificador);
+	}
+
 }

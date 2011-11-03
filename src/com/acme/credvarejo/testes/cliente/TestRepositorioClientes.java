@@ -1,29 +1,31 @@
 package com.acme.credvarejo.testes.cliente;
 
-import com.acme.credvarejo.ado.cliente.RepositorioClientes;
+import com.acme.credvarejo.ado.cliente.RepositorioClientesImpl;
 import com.acme.credvarejo.cliente.Cliente;
 import com.acme.credvarejo.cliente.Cpf;
 
 public class TestRepositorioClientes {
 
 	public static void main(String[] args) {
-		RepositorioClientes r = new RepositorioClientes();
+		RepositorioClientesImpl r = new RepositorioClientesImpl();
 
-		Cpf cpf = new Cpf("054377074");
+		Cpf cpf = new Cpf("054377074", "52");
 
 		Cliente bruno = new Cliente(cpf, "Bruno Basto", 22, 360, 0);
 
-		r.addCliente(bruno);
+		r.add(bruno);
 
 		// Retorna o cliente Bruno
-		System.out.println(r.getCliente(cpf));
+		System.out.println(r.get(cpf));
 		
 		// Retorna null - Nao Achou
-		System.out.println(r.getCliente(new Cpf("123456789")));
+		System.out.println(r.get(new Cpf("123456789", "53")));
 
-		r.removeCliente(cpf);
+		r.remove(cpf);
 
-		System.out.println(r.getClientes().length);
+		Cliente[] clientes = r.getAll();
+
+		System.out.println(clientes.length);
 	}
 	
 }

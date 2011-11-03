@@ -9,5 +9,5 @@ public class MovimentoCrediarioDebito extends MovimentoCrediario {
 
 		super(conta, valor, data);
 	}
-	
+
 }

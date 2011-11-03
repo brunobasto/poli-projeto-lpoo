@@ -1,31 +1,16 @@
 package com.acme.credvarejo.ado.cliente;
 
-import com.acme.credvarejo.classesGerais.RepositorioIdentificaveis;
+import com.acme.credvarejo.classesGerais.Identificador;
 import com.acme.credvarejo.cliente.Cliente;
-import com.acme.credvarejo.cliente.Cpf;
 
-public class RepositorioClientes {
+public interface RepositorioClientes {
 
-	private RepositorioIdentificaveis repositorio;
+	public void add(Cliente cliente);
 
-	public RepositorioClientes() {
-		this.repositorio = new RepositorioIdentificaveis();
-	}
+	public Cliente get(Identificador identificador);
 
-	public void addCliente(Cliente cliente) {
-		repositorio.add(cliente);
-	}
+	public Cliente[] getAll();
 
-	public Cliente getCliente(Cpf cpf) {
-		return (Cliente)repositorio.get(cpf.getNumero());
-	}
-
-	public Cliente[] getClientes() {
-		return (Cliente[])repositorio.getAll();
-	}
-
-	public void removeCliente(Cpf cpf) {
-		repositorio.remove(cpf.getNumero());
-	}
-
+	public void remove(Identificador identificador);
+	
 }

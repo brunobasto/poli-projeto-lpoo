@@ -9,9 +9,9 @@ public class TestContaCrediario {
 
 	public static void main(String[] args) {
 		IdentificadorContaCrediario identificador =
-			new IdentificadorContaCrediario(123456);
+			new IdentificadorContaCrediario("123");
 
-		Cpf cpf = new Cpf("054377074");
+		Cpf cpf = new Cpf("054377074", "52");
 		
 		Cliente cliente = new Cliente(cpf, "Bruno Basto", 22, 360, 0);
 

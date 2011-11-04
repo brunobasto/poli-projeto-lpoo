@@ -3,7 +3,6 @@ package com.acme.credvarejo.conta;
 import java.util.Date;
 
 import com.acme.credvarejo.classesGerais.Registro;
-import com.acme.credvarejo.cliente.Cliente;
 import com.acme.credvarejo.conta.exceptions.ContaCrediarioException;
 import com.acme.credvarejo.conta.exceptions.DataException;
 import com.acme.credvarejo.conta.exceptions.ValorException;
@@ -27,7 +26,7 @@ public abstract class MovimentoCrediario extends Registro {
 		ContaCrediario conta = getConta();
 		Date data = getData();
 
-		return conta.getChave() + data.toString();
+		return conta.getChave() + data.getTime();
 	}
 
 	public ContaCrediario getConta() {

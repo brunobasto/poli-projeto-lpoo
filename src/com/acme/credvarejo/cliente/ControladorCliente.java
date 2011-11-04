@@ -1,5 +1,7 @@
 package com.acme.credvarejo.cliente;
 
+import java.io.IOException;
+
 import com.acme.credvarejo.ado.cliente.RepositorioClientes;
 import com.acme.credvarejo.classesGerais.exceptions.NoSuchRegistroException;
 import com.acme.credvarejo.cliente.exceptions.ClienteException;
@@ -13,7 +15,7 @@ public class ControladorCliente {
 	}
 	
 	public void alterar(Cliente cliente)
-		throws NoSuchRegistroException, ClienteException {
+		throws NoSuchRegistroException, ClienteException, IOException {
 
 		if (cliente != null) {
 			cliente.validar();
@@ -25,7 +27,7 @@ public class ControladorCliente {
 		}
 	} 
 
-	public Cliente buscar(Cpf cpf) throws NoSuchRegistroException {
+	public Cliente buscar(Cpf cpf) throws NoSuchRegistroException, IOException {
 		Cliente cliente = null;
 
 		if (cpf != null) {
@@ -38,11 +40,11 @@ public class ControladorCliente {
 		return cliente;
 	}
 
-	public Cliente[] buscarTodos() {
+	public Cliente[] buscarTodos() throws IOException {
 		return repositorioClientes.getAll();
 	}
 
-	public void excluir(Cpf cpf) throws NoSuchRegistroException {
+	public void excluir(Cpf cpf) throws NoSuchRegistroException, IOException {
 		if (cpf != null) {
 			repositorioClientes.remove(cpf);
 		}
@@ -51,7 +53,7 @@ public class ControladorCliente {
 		}
 	}
 
-	public void incluir(Cliente cliente) throws ClienteException {
+	public void incluir(Cliente cliente) throws ClienteException, IOException {
 		if (cliente != null) {
 			cliente.validar();
 			

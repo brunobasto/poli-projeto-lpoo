@@ -4,16 +4,16 @@ import java.util.Arrays;
 
 import com.acme.credvarejo.classesGerais.Identificador;
 import com.acme.credvarejo.classesGerais.Registro;
-import com.acme.credvarejo.classesGerais.RepositorioIdentificaveis;
+import com.acme.credvarejo.classesGerais.RepositorioIdentificaveisArray;
 import com.acme.credvarejo.classesGerais.exceptions.NoSuchRegistroException;
 import com.acme.credvarejo.cliente.Cliente;
 
-public class RepositorioClientesImpl implements RepositorioClientes {
+public class RepositorioClientesArray implements RepositorioClientes {
 
-	private RepositorioIdentificaveis repositorio;
+	private RepositorioIdentificaveisArray repositorio;
 
-	public RepositorioClientesImpl() {
-		this.repositorio = new RepositorioIdentificaveis();
+	public RepositorioClientesArray() {
+		this.repositorio = new RepositorioIdentificaveisArray();
 	}
 
 	public void add(Cliente cliente) {

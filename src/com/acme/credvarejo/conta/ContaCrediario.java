@@ -45,7 +45,7 @@ public class ContaCrediario extends Registro {
 	public void efetuarPagamento(double pagamento) {
 		this.saldoDevido -= pagamento;
 	}
-	
+
 	@Override
 	public String getChave() {
 		IdentificadorContaCrediario identificador = getIdentificador();

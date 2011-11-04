@@ -2,7 +2,7 @@ package com.acme.credvarejo.testes.conta;
 
 import java.util.Date;
 
-import com.acme.credvarejo.ado.conta.RepositorioMovimentoCrediarioImpl;
+import com.acme.credvarejo.ado.conta.RepositorioMovimentoCrediarioArray;
 import com.acme.credvarejo.cliente.Cliente;
 import com.acme.credvarejo.cliente.Cpf;
 import com.acme.credvarejo.conta.ContaCrediario;
@@ -13,7 +13,7 @@ import com.acme.credvarejo.conta.MovimentoCrediarioDebito;
 public class TestRepositorioMovimentoCrediario {
 
 	public static void main(String[] args) {
-		RepositorioMovimentoCrediarioImpl r = new RepositorioMovimentoCrediarioImpl();
+		RepositorioMovimentoCrediarioArray r = new RepositorioMovimentoCrediarioArray();
 
 		IdentificadorContaCrediario identificador =
 			new IdentificadorContaCrediario("123456");

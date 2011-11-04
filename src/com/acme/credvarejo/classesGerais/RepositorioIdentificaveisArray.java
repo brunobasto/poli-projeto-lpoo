@@ -6,11 +6,11 @@ import java.util.List;
 
 import com.acme.credvarejo.classesGerais.exceptions.NoSuchRegistroException;
 
-public class RepositorioIdentificaveis {
+public class RepositorioIdentificaveisArray {
 
 	private Registro[] identificavel;
 
-	public RepositorioIdentificaveis() {
+	public RepositorioIdentificaveisArray() {
 		this.identificavel = new Registro[] {};
 	}
 

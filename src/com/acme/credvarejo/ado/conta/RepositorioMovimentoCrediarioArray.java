@@ -5,17 +5,17 @@ import java.util.Arrays;
 
 import com.acme.credvarejo.classesGerais.Identificador;
 import com.acme.credvarejo.classesGerais.Registro;
-import com.acme.credvarejo.classesGerais.RepositorioIdentificaveis;
+import com.acme.credvarejo.classesGerais.RepositorioIdentificaveisArray;
 import com.acme.credvarejo.conta.ContaCrediario;
 import com.acme.credvarejo.conta.MovimentoCrediario;
 
-public class RepositorioMovimentoCrediarioImpl
+public class RepositorioMovimentoCrediarioArray
 	implements RepositorioMovimentoCrediario {
 
-	private RepositorioIdentificaveis repositorio;
+	private RepositorioIdentificaveisArray repositorio;
 
-	public RepositorioMovimentoCrediarioImpl() {
-		this.repositorio = new RepositorioIdentificaveis();
+	public RepositorioMovimentoCrediarioArray() {
+		this.repositorio = new RepositorioIdentificaveisArray();
 	}
 
 	public void add(MovimentoCrediario movimentoCrediario) {

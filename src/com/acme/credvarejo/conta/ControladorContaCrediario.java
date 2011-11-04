@@ -1,5 +1,6 @@
 package com.acme.credvarejo.conta;
 
+import java.io.IOException;
 import java.util.Date;
 
 import com.acme.credvarejo.ado.conta.RepositorioContaCrediario;
@@ -8,19 +9,22 @@ import com.acme.credvarejo.classesGerais.exceptions.NoSuchRegistroException;
 import com.acme.credvarejo.cliente.Cliente;
 import com.acme.credvarejo.cliente.Cpf;
 import com.acme.credvarejo.conta.exceptions.ContaCrediarioException;
+import com.acme.credvarejo.conta.exceptions.LimiteDeCreditoException;
 
 public class ControladorContaCrediario {
 
 	private RepositorioContaCrediario repositorioContas;
 	
-	public ControladorContaCrediario(RepositorioContaCrediario repositorioContas) {
+	public ControladorContaCrediario(
+		RepositorioContaCrediario repositorioContas) {
+
 		this.repositorioContas = repositorioContas;
 	}
 
 	public void alterar(
 			Cliente cliente, double limiteDeCredito, int vencimento)
-		throws ContaCrediarioException, NoSuchRegistroException {
-		
+		throws ContaCrediarioException, NoSuchRegistroException, IOException {
+
 		Identificador identificador = cliente.getCpf();
 
 		ContaCrediario contaCrediario = repositorioContas.get(identificador);
@@ -34,85 +38,82 @@ public class ControladorContaCrediario {
 	}
 
 	public ContaCrediario buscar(IdentificadorContaCrediario identificador)
-		throws NoSuchRegistroException {
+		throws NoSuchRegistroException, IOException {
 
-		if (identificador != null) {
-			return repositorioContas.get(identificador);
+		if (identificador == null) {
+			throw new NoSuchRegistroException("Esta conta não existe.");
 		}
 
-		System.err.println("Esta conta não existe.");
-
-		return null;
+		return repositorioContas.get(identificador);
 	}
-	
-	public ContaCrediario[] buscarTodos() {
+
+	public ContaCrediario[] buscarTodos()
+		throws IOException, NoSuchRegistroException {
+
 		return repositorioContas.getAll();
 	}
-	
+
 	public void creditar(
 			IdentificadorContaCrediario identificador, double valor,
 			ControladorMovimentoCrediario controladorMovimentoCrediario)
-		throws ContaCrediarioException, NoSuchRegistroException {
+		throws ContaCrediarioException, NoSuchRegistroException, IOException {
 
 		if (identificador == null) {
-			System.err.println("O identificador passado não existe.");
-
-			return;
+			throw new NoSuchRegistroException(
+				"O identificador passado não existe.");
 		}
 
-		ContaCrediario conta = repositorioContas.get(identificador);
-		
-		if (conta == null) {
-			throw new ContaCrediarioException("Esta conta não existe.");
-		}
+		ContaCrediario contaCrediario = repositorioContas.get(identificador);
 
-		conta.efetuarPagamento(valor);
+		contaCrediario.efetuarPagamento(valor);
 
 		MovimentoCrediario movimento = new MovimentoCrediarioCredito(
-			conta, valor, new Date());
+			contaCrediario, valor, new Date());
 
 		movimento.validar();
 
 		controladorMovimentoCrediario.inserir(movimento);
+
+		repositorioContas.update(identificador, contaCrediario);
 	}
-	
+
 	public void debitar(
 			IdentificadorContaCrediario identificador, double valor,
 			ControladorMovimentoCrediario controladorMovimentoCrediario)
-		throws ContaCrediarioException, NoSuchRegistroException {
+		throws ContaCrediarioException, NoSuchRegistroException, IOException {
 
 		if (identificador == null) {
-			System.err.println("O identificador passado não existe.");
-
-			return;
+			throw new NoSuchRegistroException(
+				"O identificador passado não existe.");
 		}
 
-		ContaCrediario conta = repositorioContas.get(identificador);
-		
-		if (conta == null) {
-			throw new ContaCrediarioException("Esta conta não existe.");
-		}
+		ContaCrediario contaCrediario = repositorioContas.get(identificador);
 
-		if (conta.getLimiteDeCredito() <= valor) {
-			conta.efetuarCompra(valor);
+		if (contaCrediario.getLimiteDeCredito() >= valor) {
+			contaCrediario.efetuarCompra(valor);
 
 			MovimentoCrediario movimento = new MovimentoCrediarioDebito(
-				conta, valor, new Date());
+				contaCrediario, valor, new Date());
 
 			movimento.validar();
 
 			controladorMovimentoCrediario.inserir(movimento);
+
+			repositorioContas.update(identificador, contaCrediario);
+		}
+		else {
+			throw new LimiteDeCreditoException("Limite insuficiente.");
 		}
 	}
 
 	public void excluir(IdentificadorContaCrediario identificador)
-		throws NoSuchRegistroException {
+		throws NoSuchRegistroException, IOException {
 
 		if (identificador != null) {
 			repositorioContas.remove(identificador);
 		}
 		else {
-			System.err.println("Esta conta não existe.");
+			throw new NoSuchRegistroException("Esta conta não existe.");
 		}
 	}
 

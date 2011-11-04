@@ -1,6 +1,6 @@
 package com.acme.credvarejo.testes.conta;
 
-import com.acme.credvarejo.ado.conta.RepositorioContaCrediarioImpl;
+import com.acme.credvarejo.ado.conta.RepositorioContaCrediarioArray;
 import com.acme.credvarejo.classesGerais.exceptions.NoSuchRegistroException;
 import com.acme.credvarejo.cliente.Cliente;
 import com.acme.credvarejo.cliente.Cpf;
@@ -10,7 +10,7 @@ import com.acme.credvarejo.conta.IdentificadorContaCrediario;
 public class TestRepositorioContaCrediario {
 
 	public static void main(String[] args) {
-		RepositorioContaCrediarioImpl r = new RepositorioContaCrediarioImpl();
+		RepositorioContaCrediarioArray r = new RepositorioContaCrediarioArray();
 
 		IdentificadorContaCrediario identificador =
 			new IdentificadorContaCrediario("123456");

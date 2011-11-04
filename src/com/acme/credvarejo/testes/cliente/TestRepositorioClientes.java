@@ -1,6 +1,6 @@
 package com.acme.credvarejo.testes.cliente;
 
-import com.acme.credvarejo.ado.cliente.RepositorioClientesImpl;
+import com.acme.credvarejo.ado.cliente.RepositorioClientesArray;
 import com.acme.credvarejo.classesGerais.exceptions.NoSuchRegistroException;
 import com.acme.credvarejo.cliente.Cliente;
 import com.acme.credvarejo.cliente.Cpf;
@@ -8,7 +8,7 @@ import com.acme.credvarejo.cliente.Cpf;
 public class TestRepositorioClientes {
 
 	public static void main(String[] args) {
-		RepositorioClientesImpl r = new RepositorioClientesImpl();
+		RepositorioClientesArray r = new RepositorioClientesArray();
 
 		Cpf cpf = new Cpf("054377074", "52");
 

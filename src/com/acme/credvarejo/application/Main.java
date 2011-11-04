@@ -4,9 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import com.acme.credvarejo.ado.cliente.RepositorioClientesImpl;
-import com.acme.credvarejo.ado.conta.RepositorioContaCrediarioImpl;
-import com.acme.credvarejo.ado.conta.RepositorioMovimentoCrediarioImpl;
+import com.acme.credvarejo.ado.cliente.RepositorioClientesFile;
+import com.acme.credvarejo.ado.conta.RepositorioContaCrediarioFile;
+import com.acme.credvarejo.ado.conta.RepositorioMovimentoCrediarioFile;
 import com.acme.credvarejo.classesGerais.exceptions.NoSuchRegistroException;
 import com.acme.credvarejo.cliente.Cliente;
 import com.acme.credvarejo.cliente.ControladorCliente;
@@ -27,15 +27,15 @@ import com.acme.credvarejo.conta.exceptions.ContaCrediarioException;
 import com.acme.credvarejo.conta.exceptions.VencimentoException;
 
 public class Main {
-	
+
 	private static final ControladorCliente controladorCliente =
-		new ControladorCliente(new RepositorioClientesImpl());
-	
+		new ControladorCliente(new RepositorioClientesFile());
+
 	private static final ControladorContaCrediario controladorContaCrediario =
-		new ControladorContaCrediario(new RepositorioContaCrediarioImpl());
-	
+		new ControladorContaCrediario(new RepositorioContaCrediarioFile());
+
 	private static final ControladorMovimentoCrediario controladorMovimentoCrediario =
-		new ControladorMovimentoCrediario(new RepositorioMovimentoCrediarioImpl());
+		new ControladorMovimentoCrediario(new RepositorioMovimentoCrediarioFile());
 
 	private static boolean backOrRepeat(BufferedReader reader)
 		throws IOException {
@@ -69,8 +69,16 @@ public class Main {
 		try {
 			controladorContaCrediario.creditar(
 				identificador, valor, controladorMovimentoCrediario);
-		} catch (ContaCrediarioException cce) {
-			System.out.println("\n" + cce.getMessage() + "\n");
+		} catch (Exception e) {
+			if (e instanceof NoSuchRegistroException) {
+				System.out.println("\nConta não encontrada.\n");
+			}
+			else if (e instanceof ContaCrediarioException) {
+				System.out.println("\n" + e.getMessage() + "\n");
+			}
+			else {
+				throw e;
+			}
 
 			if (backOrRepeat(reader)) {
 				creditar(reader);
@@ -103,9 +111,17 @@ public class Main {
 		try {
 			controladorContaCrediario.debitar(
 				identificador, valor, controladorMovimentoCrediario);
-		} catch (ContaCrediarioException cce) {
-			System.out.println("\n" + cce.getMessage() + "\n");
-			
+		} catch (Exception e) {
+			if (e instanceof NoSuchRegistroException) {
+				System.out.println("\nConta não encontrada.\n");
+			}
+			else if (e instanceof ContaCrediarioException) {
+				System.out.println("\n" + e.getMessage() + "\n");
+			}
+			else {
+				throw e;
+			}
+
 			if (backOrRepeat(reader)) {
 				debitar(reader);
 			}
@@ -200,7 +216,7 @@ public class Main {
 
 		return value;
 	}
-	
+
 	private static void searchAllClientes(BufferedReader reader)
 		throws Exception {
 
@@ -213,7 +229,7 @@ public class Main {
 			showMainMenu(reader);
 		}
 	}
-	
+
 	private static void searchCliente(BufferedReader reader)
 		throws Exception {
 
@@ -224,14 +240,14 @@ public class Main {
 		String digito = reader.readLine();
 
 		Cpf cpf = new Cpf(numero, digito);
-		
+
 		Cliente cliente = null;
 
 		try {
 			cliente = controladorCliente.buscar(cpf);
 		}
 		catch (NoSuchRegistroException nsre) {
-			System.out.println("\n" + nsre.getMessage() + "\n");
+			System.out.println("\nCliente não encontrado.\n");
 
 			if (backOrRepeat(reader)) {
 				searchCliente(reader);
@@ -253,7 +269,7 @@ public class Main {
 		}
 	}
 
-	private static void showCliente(Cliente cliente) {
+	private static void showCliente(Cliente cliente) throws IOException {
 		System.out.println("\nNome: " + cliente.getNome());
 		System.out.println("Idade: " + cliente.getIdade());
 		System.out.println("Renda: " + cliente.getRenda());
@@ -284,7 +300,7 @@ public class Main {
 		System.out.println("\n");
 	}
 
-	private static void showClientes() {
+	private static void showClientes() throws IOException {
 		Cliente[] clientes = controladorCliente.buscarTodos();
 
 		if (clientes.length > 0) {
@@ -305,72 +321,72 @@ public class Main {
 	}
 
 	private static void showExtratoCliente(BufferedReader reader)
-			throws Exception {
+		throws Exception {
 
-			System.out.print("Digite o número do CPF (sem o dígito): ");
-			String numero = reader.readLine();
+		System.out.print("Digite o número do CPF (sem o dígito): ");
+		String numero = reader.readLine();
 
-			System.out.print("Digite o digito do CPF: ");
-			String digito = reader.readLine();
+		System.out.print("Digite o digito do CPF: ");
+		String digito = reader.readLine();
 
-			Cpf cpf = new Cpf(numero, digito);
+		Cpf cpf = new Cpf(numero, digito);
 
-			Cliente cliente = null;
+		Cliente cliente = null;
 
-			try {
-				cliente = controladorCliente.buscar(cpf);
-			}
-			catch (NoSuchRegistroException nsre) {
-				System.out.println("\n" + nsre.getMessage() + "\n");
-
-				if (backOrRepeat(reader)) {
-					showExtratoCliente(reader);
-				}
-				else {
-					showMainMenu(reader);
-				}
-			}
-
-			if (cliente != null) {
-				IdentificadorContaCrediario identificador =
-					new IdentificadorContaCrediario(cliente.getChave());
-				
-				ContaCrediario contaCrediario =
-					controladorContaCrediario.buscar(identificador);
-
-				if (contaCrediario != null) {
-					System.out.println(
-						"\n" + contaCrediario.getNomeExtrato() + "\n");
-
-					MovimentoCrediario[] movimentos =
-						controladorMovimentoCrediario.buscar(identificador);
-
-					for (int i = 0; i < movimentos.length; i++) {
-						MovimentoCrediario movimentoCrediario = movimentos[i];
-
-						if (movimentoCrediario instanceof MovimentoCrediarioCredito) {
-							System.out.print("Crédito");
-						}
-						else {
-							System.out.print("Débito");
-						}
-
-						System.out.println(
-							" -- R$ " + movimentoCrediario.getValor());
-					}
-
-					System.out.println(
-						"\nSaldo: R$ " + contaCrediario.getSaldoDevido() + "\n");
-				}
-			}
+		try {
+			cliente = controladorCliente.buscar(cpf);
+		}
+		catch (NoSuchRegistroException nsre) {
+			System.out.println("\n" + nsre.getMessage() + "\n");
 
 			if (backOrRepeat(reader)) {
-				searchCliente(reader);
+				showExtratoCliente(reader);
 			}
 			else {
 				showMainMenu(reader);
 			}
 		}
+
+		if (cliente != null) {
+			IdentificadorContaCrediario identificador =
+				new IdentificadorContaCrediario(cliente.getChave());
+
+			ContaCrediario contaCrediario =
+				controladorContaCrediario.buscar(identificador);
+
+			if (contaCrediario != null) {
+				System.out.println(
+					"\n" + contaCrediario.getNomeExtrato() + "\n");
+
+				MovimentoCrediario[] movimentos =
+					controladorMovimentoCrediario.buscar(identificador);
+
+				for (int i = 0; i < movimentos.length; i++) {
+					MovimentoCrediario movimentoCrediario = movimentos[i];
+
+					if (movimentoCrediario instanceof MovimentoCrediarioCredito) {
+						System.out.print("Crédito");
+					}
+					else {
+						System.out.print("Débito");
+					}
+
+					System.out.println(
+						" -- R$ " + movimentoCrediario.getValor());
+				}
+
+				System.out.println(
+					"\nSaldo: R$ " + contaCrediario.getSaldoDevido() + "\n");
+			}
+		}
+
+		if (backOrRepeat(reader)) {
+			searchCliente(reader);
+		}
+		else {
+			showMainMenu(reader);
+		}
+	}
 
 	private static void showMainMenu(BufferedReader reader) throws Exception {
 		System.out.println("Que operação você deseja realizar?\n");
@@ -447,13 +463,21 @@ public class Main {
 			new IdentificadorContaCrediario(numeroDebito);
 
 		try {
-			controladorContaCrediario.creditar(
-				identificadorCredito, valor, controladorMovimentoCrediario);
-
 			controladorContaCrediario.debitar(
 				identificadorDebito, valor, controladorMovimentoCrediario);
-		} catch (ContaCrediarioException cce) {
-			System.out.println("\n" + cce.getMessage() + "\n");
+
+			controladorContaCrediario.creditar(
+				identificadorCredito, valor, controladorMovimentoCrediario);
+		} catch (Exception e) {
+			if (e instanceof NoSuchRegistroException) {
+				System.out.println("\nConta não encontrada.\n");
+			}
+			else if (e instanceof ContaCrediarioException) {
+				System.out.println("\n" + e.getMessage() + "\n");
+			}
+			else {
+				throw e;
+			}
 
 			if (backOrRepeat(reader)) {
 				transferir(reader);

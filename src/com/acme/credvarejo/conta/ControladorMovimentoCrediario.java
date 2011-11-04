@@ -1,6 +1,9 @@
 package com.acme.credvarejo.conta;
 
+import java.io.IOException;
+
 import com.acme.credvarejo.ado.conta.RepositorioMovimentoCrediario;
+import com.acme.credvarejo.classesGerais.exceptions.NoSuchRegistroException;
 import com.acme.credvarejo.conta.exceptions.ContaCrediarioException;
 
 public class ControladorMovimentoCrediario {
@@ -14,13 +17,14 @@ public class ControladorMovimentoCrediario {
 	}
 
 	public MovimentoCrediario[] buscar(
-		IdentificadorContaCrediario identificador) {
+			IdentificadorContaCrediario identificador)
+		throws IOException, NoSuchRegistroException {
 
 		return repositorioMovimentoCrediario.search(identificador);
 	}
 
 	public void inserir(MovimentoCrediario movimentoCrediario)
-		throws ContaCrediarioException {
+		throws ContaCrediarioException, IOException {
 
 		if (movimentoCrediario != null) {
 			movimentoCrediario.validar();

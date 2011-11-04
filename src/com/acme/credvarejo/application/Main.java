@@ -305,15 +305,13 @@ public class Main {
 
 		if (clientes.length > 0) {
 			System.out.println("\nClientes: \n");
-			
+
 			for (int i = 0; i < clientes.length; i++) {
 				Cliente cliente = clientes[i];
-				
+
 				System.out.println(
 					cliente.getChave() + " - " + cliente.getNome());
 			}
-
-			System.out.println("\n");
 		}
 		else {
 			System.out.println("\nNenhum cliente cadastrado.\n");
@@ -441,6 +439,9 @@ public class Main {
 		}
 		else if (option == 9) {
 			showExtratoCliente(reader);
+		}
+		else {
+			Thread.currentThread().stop();
 		}
 	}
 

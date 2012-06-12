@@ -9,23 +9,23 @@ import com.acme.credvarejo.cliente.exceptions.ClienteException;
 public class ControladorCliente {
 
 	private RepositorioClientes repositorioClientes;
-	
+
 	public ControladorCliente(RepositorioClientes repositorioClientes) {
 		this.repositorioClientes = repositorioClientes;
 	}
-	
+
 	public void alterar(Cliente cliente)
 		throws NoSuchRegistroException, ClienteException, IOException {
 
 		if (cliente != null) {
 			cliente.validar();
-			
+
 			repositorioClientes.update(cliente.getCpf(), cliente);
 		}
 		else {
 			throw new NoSuchRegistroException("Este cliente não existe.");
 		}
-	} 
+	}
 
 	public Cliente buscar(Cpf cpf) throws NoSuchRegistroException, IOException {
 		Cliente cliente = null;
@@ -56,12 +56,12 @@ public class ControladorCliente {
 	public void incluir(Cliente cliente) throws ClienteException, IOException {
 		if (cliente != null) {
 			cliente.validar();
-			
+
 			repositorioClientes.add(cliente);
 		}
 		else {
 			System.err.println("Este cliente não existe.");
 		}
 	}
-	
+
 }

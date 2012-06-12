@@ -1,11 +1,13 @@
-<project name="QueryLanguageBuilder" default="all" basedir=".">
-  <description>Create and run Query Language application</description>
+<project name="LOJALPOO" default="all" basedir=".">
+  <description>Loja de LPOO</description>
 
-  <property name="src" location="src"/>
   <property name="classes" location="classes"/>
   <property name="dist"  location="dist"/>
+  <property name="lib" location="lib"/>
+  <property name="src" location="src"/>
+  <property name="tomcat"  location="../bundle/apache-tomcat-6.0.35"/>
 
-  <target name="all" depends="clean,dist" />
+  <target name="all" depends="clean,deploy-web,dist" />
 
   <target name="init">
     <mkdir dir="${classes}"/>
@@ -13,14 +15,43 @@
 
   <target name="compile" depends="init">
     <copy todir="${classes}">
-      <fileset dir="${src}" excludes="**/*.java"/>  
+      <fileset dir="${src}" excludes="**/*.java"/>
     </copy>
 
-    <javac srcdir="${src}" destdir="${classes}"></javac>
+    <path id="classpath">
+      <fileset dir="lib">
+        <include name="*.jar"/>
+      </fileset>
+    </path>
+
+    <javac srcdir="${src}" destdir="${classes}" >
+        <classpath refid="classpath"/>
+    </javac>
+  </target>
+
+  <target name="deploy-web" depends="dist">
+    <copy todir="webapp/WEB-INF/lib">
+      <fileset dir="lib">
+        <include name="*.jar"/>
+      </fileset>
+    </copy>
+
+    <copy todir="${tomcat}/webapps/credvarejo">
+      <fileset dir="webapp" includes="*.html,*.jsp" />
+    </copy>
+
+    <copy todir="${tomcat}/webapps/credvarejo/WEB-INF">
+      <fileset dir="webapp/WEB-INF" includes="*.xml" />
+    </copy>
+
+    <copy todir="${tomcat}/webapps/credvarejo/WEB-INF/lib">
+      <fileset dir="${dist}" includes="*.jar" />
+      <fileset dir="webapp/WEB-INF/lib" includes="*.jar" />
+    </copy>
   </target>
 
   <target name="dist" depends="compile">
-    <jar jarfile="${dist}/TrabalhoLPOO.jar" basedir="${classes}" update="true">
+    <jar jarfile="${dist}/credvarejo.jar" basedir="${classes}" update="true">
       <manifest>
         <attribute name="Main-Class" value="com.acme.credvarejo.application.Main"/>
       </manifest>

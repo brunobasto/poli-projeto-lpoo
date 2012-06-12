@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE web-app 
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" 
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+
+	<display-name>Loja LPOO</display-name>
+	<description>
+		Projeto para a disciplina de LPOO da Escola Pliecnica de Pernambuco.
+		Semestre 2012.1
+	</description>
+
+	<context-param>
+		<param-name>bruno.basto</param-name>
+		<param-value>bgba@ecomp.poli.br</param-value>
+	</context-param>
+
+	<servlet>
+		<servlet-name>action</servlet-name>
+		<servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
+		<init-param>
+			<param-name>config</param-name>
+			<param-value>/WEB-INF/struts-config.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet>
+		<servlet-name>json</servlet-name>
+		<servlet-class>com.acme.credvarejo.web.action.JSONAction</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>action</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>json</servlet-name>
+		<url-pattern>/json</url-pattern>
+	</servlet-mapping>
+
+</web-app>

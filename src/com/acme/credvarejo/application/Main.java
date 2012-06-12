@@ -5,8 +5,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import com.acme.credvarejo.ado.cliente.RepositorioClientesFile;
+import com.acme.credvarejo.ado.cliente.RepositorioClientesMySQL;
 import com.acme.credvarejo.ado.conta.RepositorioContaCrediarioFile;
+import com.acme.credvarejo.ado.conta.RepositorioContaCrediarioMySQL;
 import com.acme.credvarejo.ado.conta.RepositorioMovimentoCrediarioFile;
+import com.acme.credvarejo.ado.conta.RepositorioMovimentoCrediarioMySQL;
 import com.acme.credvarejo.classesGerais.exceptions.NoSuchRegistroException;
 import com.acme.credvarejo.cliente.Cliente;
 import com.acme.credvarejo.cliente.ControladorCliente;
@@ -29,25 +32,25 @@ import com.acme.credvarejo.conta.exceptions.VencimentoException;
 public class Main {
 
 	private static final ControladorCliente controladorCliente =
-		new ControladorCliente(new RepositorioClientesFile());
+		new ControladorCliente(new RepositorioClientesMySQL());
 
 	private static final ControladorContaCrediario controladorContaCrediario =
-		new ControladorContaCrediario(new RepositorioContaCrediarioFile());
+		new ControladorContaCrediario(new RepositorioContaCrediarioMySQL());
 
 	private static final ControladorMovimentoCrediario controladorMovimentoCrediario =
-		new ControladorMovimentoCrediario(new RepositorioMovimentoCrediarioFile());
+		new ControladorMovimentoCrediario(new RepositorioMovimentoCrediarioMySQL());
 
 	private static boolean backOrRepeat(BufferedReader reader)
 		throws IOException {
 
-		System.out.println("Deseja repetir a operação?\n");
-		
+		System.out.println("Deseja repetir a operacao");
+
 		System.out.println("1 - Sim");
-		
-		System.out.println("2 - Não");
-		
-		System.out.print("\nOpção: ");
-		
+
+		System.out.println("2 - Nao");
+
+		System.out.print("operacao: ");
+
 		if (readInteger(reader) == 1) {
 			return true;
 		}
@@ -199,7 +202,7 @@ public class Main {
 
 		return value;
 	}
-	
+
 	private static int readInteger(BufferedReader reader) throws IOException {
 		int value = 0;
 
@@ -412,7 +415,7 @@ public class Main {
 			option = readInteger(reader);
 		}
 		while (option < 1 || option > index);
-		
+
 		if (option == 1) {
 			updateCliente(reader);
 		}
@@ -449,7 +452,7 @@ public class Main {
 		System.out.print(
 			"\nDigite o número do CPF (sem o dígito) da conta a ser creditada: ");
 		String numeroCredito = reader.readLine();
-		
+
 		System.out.print(
 			"Digite o número do CPF (sem o dígito) da conta a ser debitada: ");
 		String numeroDebito = reader.readLine();
@@ -575,7 +578,7 @@ public class Main {
 		}
 
 		System.out.println("\nCliente salvo com sucesso!\n");
-		
+
 		if (backOrRepeat(reader)) {
 			updateCliente(reader);
 		}

@@ -25,7 +25,7 @@ public class Cliente extends Registro {
 	private int sexo;
 
 	public static final int SEXO_FEMININO = 1;
-	
+
 	public static final int SEXO_MASCULINO = 0;
 
 	public Cliente(Cpf cpf, String nome, int idade, double renda, int sexo) {
@@ -87,7 +87,7 @@ public class Cliente extends Registro {
 	public void setClienteDesde(Date clienteDesde) {
 		this.clienteDesde = clienteDesde;
 	}
-	
+
 	public void setCpf(Cpf cpf) {
 		this.cpf = cpf;
 	}
@@ -102,8 +102,8 @@ public class Cliente extends Registro {
 
 	public void setRenda(double renda) {
 		this.renda = renda;
-	} 
-	
+	}
+
 	public void setSexo(int sexo) {
 		this.sexo = sexo;
 	}
@@ -113,40 +113,40 @@ public class Cliente extends Registro {
 		if (getCpf() == null) {
 			throw new CpfException("O C.P.F. não pode ser nulo.");
 		}
-		
+
 		String nome = getNome();
-		
+
 		if (nome == null) {
 			throw new NomeException("O nome não pode ser nulo.");
 		}
-		
+
 		if (nome.equals("")) {
 			throw new NomeException("O nome não pode ser em branco.");
 		}
-		
+
 		if (nome.length() > 60) {
 			throw new NomeException(
 				"O nome não pode ter mais do que 60 caracteres.");
 		}
-		
+
 		int idade = getIdade();
-		
+
 		if (idade < 18 || idade > 200) {
 			throw new IdadeException(
 				"A idade tem que ser maior do que 18 anos e menor que 200 " +
 				"anos.");
 		}
-		
+
 		double renda = getRenda();
-		
+
 		if (renda < 0 || renda > 1000000) {
 			throw new RendaException(
 				"A renda não pode ser menor que zero e não pode ser maior que" +
 				" R$ 1.000.000,00.");
 		}
-		
+
 		int sexo = getSexo();
-		
+
 		if (sexo != SEXO_FEMININO && sexo != SEXO_MASCULINO) {
 			throw new SexoException("O sexo deve ser Masculino ou Feminino.");
 		}

@@ -27,35 +27,53 @@ public class JSONAction extends HttpServlet {
 			HttpServletRequest request, HttpServletResponse response)
 		throws ServletException, IOException {
 
-		RepositorioClientesMySQL repo = new RepositorioClientesMySQL();
+		String cmd = request.getParameter("cmd");
+		String callback = request.getParameter("callback");
 
-		Cpf cpf = new Cpf("05437707452");
-
-		Cliente cliente = new Cliente(cpf, "Bruno Basto", 23, 3500, 0);
-
-		repo.add(cliente);
-
-		JSONArray jsonArray = new JSONArray();
-
-		Cliente[] clientes = repo.getAll();
-
-		for (Cliente cliente2 : clientes) {
-			if (cliente2 == null) {
-				continue;
-			}
+		if (cmd.equals("cadastrarCliente")) {
+			JSONObject test = new JSONObject();
 
 			try {
-				jsonArray.put(getClienteJSONObject(cliente2));
-			} catch (JSONException e) {
+				test.put("success", true);
+			}
+			catch (JSONException e) {
 				e.printStackTrace();
 			}
+
+			PrintWriter writer = response.getWriter();
+			writer.print(callback + "(" + test.toString() + ")");
 		}
+		else {
+			RepositorioClientesMySQL repo = new RepositorioClientesMySQL();
 
-		response.setCharacterEncoding("UTF-8");
-		response.setContentType("application/json");
+			Cpf cpf = new Cpf("05437707452");
 
-	    PrintWriter writer = response.getWriter();
-	    writer.print(jsonArray.toString());
+			Cliente cliente = new Cliente(cpf, "Bruno Basto", 23, 3500, 0);
+
+			repo.add(cliente);
+
+			JSONArray jsonArray = new JSONArray();
+
+			Cliente[] clientes = repo.getAll();
+
+			for (Cliente cliente2 : clientes) {
+				if (cliente2 == null) {
+					continue;
+				}
+
+				try {
+					jsonArray.put(getClienteJSONObject(cliente2));
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			}
+
+			response.setCharacterEncoding("UTF-8");
+			response.setContentType("application/json");
+
+		    PrintWriter writer = response.getWriter();
+		    writer.print(jsonArray.toString());
+		}
 	}
 
 	private JSONObject getClienteJSONObject(Cliente cliente)

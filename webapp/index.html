@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="initial-scale=1">
+
+		<title>CredVarejo</title>
+
+		<link rel="stylesheet" type="text/css" href="css/themes/jquery-mobile/jquery.mobile-1.0.css">
+		<link rel="stylesheet" type="text/css" href="css/themes/jquery-mobile/jquery.mobile.simpledialog.css">
+		<link rel="stylesheet" type="text/css" href="css/themes/credvarejo/theme.css">
+
+		<script src="js/lib/jquery-1.7.1.js" type="application/x-javascript" charset="utf-8"></script>
+		<script src="js/lib/jquery.tmpl.js" type="application/x-javascript" charset="utf-8"></script>
+		<script src="js/lib/jquery.mobile-1.0.js" type="application/x-javascript" charset="utf-8"></script>
+		<script src="js/lib/jquery.mobile.simpledialog.js" type="application/x-javascript" charset="utf-8"></script>
+
+		<script src="js/lib/jquery.klass.js" type="application/x-javascript" charset="utf-8"></script>
+
+		<script src="js/lpoo.core.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/lpoo.credvarejo.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<div data-role="page" id="mainView">
+			<div data-role="header">
+				<h1>Selecione uma Opção</h1>
+			</div>
+
+			<div data-role="content">
+				<ul data-role="listview" id="menuList">
+					<li><a data-action="0" href="#">Cadastrar Cliente</a></li>
+					<li><a data-action="1" href="#">Alterar Cadastro de Cliente</a></li>
+					<li><a data-action="2" href="#">Excluir Cliente</a></li>
+					<li><a data-action="3" href="#">Mostrar Todos Clientes</a></li>
+					<li><a data-action="4" href="#">Buscar Cliente</a></li>
+					<li><a data-action="5" href="#">Creditar</a></li>
+					<li><a data-action="6" href="#">Debitar</a></li>
+					<li><a data-action="7" href="#">Transferir</a></li>
+					<li><a data-action="8" href="#">Mostrar Extrato de Cliente</a></li>
+				</ul>
+			</div>
+		</div>
+
+		<div data-role="page" id="cadastroClienteView">
+			<div data-role="header">
+				<h1>Cadastrar Cliente</h1>
+			</div>
+
+			<form id="cadastroClienteForm">
+				<label for="cpf">CPF:</label>
+				<input type="text" name="cpf" id="cpf" data-mini="true" />
+
+				<label for="nome">Nome:</label>
+				<input type="text" name="nome" id="nome" data-mini="true" />
+
+				<label for="idade">Idade:</label>
+				<input type="text" name="idade" id="idade" data-mini="true" />
+
+				<label for="renda">Renda:</label>
+				<input type="text" name="renda" id="renda" data-mini="true" />
+
+				<fieldset data-role="controlgroup">
+					<legend>Sexo:</legend>
+
+			     	<input type="radio" name="sexo" id="sexoMasculino" value="0" checked="checked" />
+			     	<label for="sexoMasculino">Masculino</label>
+
+			     	<input type="radio" name="sexo" id="sexoFeminino" value="1"  />
+			     	<label for="sexoFeminino">Feminino</label>
+				</fieldset>
+
+				<label for="limiteCredito">Limite de Crédito:</label>
+				<input type="text" name="limiteCredito" id="limiteCredito" data-mini="true" />
+
+				<label for="vencimento">Vencimento da Fatura:</label>
+				<input type="text" name="vencimento" id="vencimento" data-mini="true" />
+
+				<a href="javascript:;" data-role="button" id="salvarCadastroCliente">Salvar</a>
+			</form>
+		</div>
+
+		<div data-role="page" id="alterarCadastroClienteView">
+			<div data-role="header">
+				<h1>Alterar Cadastro</h1>
+			</div>
+
+			<div data-role="content">
+				<ul data-role="listview" id="playersList"></ul>
+			</div>
+		</div>
+
+		<div data-role="page" id="excluirClienteView">
+			<div data-role="header">
+				<h1>Excluir Cliente</h1>
+			</div>
+
+			<div data-role="content">
+				<ul data-role="listview" id="playersList"></ul>
+			</div>
+		</div>
+
+		<div data-role="page" id="mostrarTodosClientesView">
+			<div data-role="header">
+				<h1>Clientes</h1>
+			</div>
+
+			<div data-role="content">
+				<ul data-role="listview" id="playersList"></ul>
+			</div>
+		</div>
+
+		<div data-role="page" id="buscarClienteView">
+			<div data-role="header">
+				<h1>Buscar Cliente</h1>
+			</div>
+
+			<div data-role="content">
+				<ul data-role="listview" id="playersList"></ul>
+			</div>
+		</div>
+
+		<div data-role="page" id="creditarView">
+			<div data-role="header">
+				<h1>Creditar</h1>
+			</div>
+
+			<div data-role="content">
+				<ul data-role="listview" id="playersList"></ul>
+			</div>
+		</div>
+
+		<div data-role="page" id="debitarView">
+			<div data-role="header">
+				<h1>Debitar</h1>
+			</div>
+
+			<div data-role="content">
+				<ul data-role="listview" id="playersList"></ul>
+			</div>
+		</div>
+
+		<div data-role="page" id="transferirView">
+			<div data-role="header">
+				<h1>Transferir</h1>
+			</div>
+
+			<div data-role="content">
+				<ul data-role="listview" id="playersList"></ul>
+			</div>
+		</div>
+
+		<div data-role="page" id="mostrarExtratoClienteView">
+			<div data-role="header">
+				<h1>Extrato de Cliente</h1>
+			</div>
+
+			<div data-role="content">
+				<ul data-role="listview" id="playersList"></ul>
+			</div>
+		</div>
+
+		<script type="text/javascript">
+		$.mobile.touchOverflowEnabled = true;
+
+		window.onload = function() {
+			var credVarejo = new LPOO.CredVarejo(
+				{
+					port: 8080,
+					url: 'http://localhost:8080/credvarejo/json'
+				}
+			);
+		};
+		</script>
+	</body>
+</html>

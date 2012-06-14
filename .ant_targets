@@ -1,0 +1,6 @@
+  all
+  init
+  compile
+  deploy-web
+  dist
+  clean

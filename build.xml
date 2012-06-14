@@ -36,8 +36,10 @@
       </fileset>
     </copy>
 
-    <copy todir="${tomcat}/webapps/credvarejo">
-      <fileset dir="webapp" includes="*.html,*.jsp" />
+    <copy toDir="${tomcat}/webapps/credvarejo">
+      <fileset dir="webapp">
+        <include name="*/**"/>
+      </fileset>
     </copy>
 
     <copy todir="${tomcat}/webapps/credvarejo/WEB-INF">

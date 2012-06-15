@@ -2,6 +2,7 @@ package com.acme.credvarejo.web.action;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,14 +14,70 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.acme.credvarejo.ado.cliente.RepositorioClientesMySQL;
+import com.acme.credvarejo.ado.conta.RepositorioContaCrediarioMySQL;
+import com.acme.credvarejo.ado.conta.RepositorioMovimentoCrediarioMySQL;
+import com.acme.credvarejo.classesGerais.exceptions.NoSuchRegistroException;
 import com.acme.credvarejo.cliente.Cliente;
 import com.acme.credvarejo.cliente.Cpf;
 import com.acme.credvarejo.conta.ContaCrediario;
+import com.acme.credvarejo.conta.IdentificadorContaCrediario;
 import com.acme.credvarejo.conta.MovimentoCrediario;
+import com.acme.credvarejo.conta.MovimentoCrediarioCredito;
+import com.acme.credvarejo.conta.MovimentoCrediarioDebito;
+import com.acme.credvarejo.conta.exceptions.ContaCrediarioException;
 
 public class JSONAction extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
+
+	private static double _getDouble(HttpServletRequest request, String param) {
+		double value = 0;
+
+		try {
+			value = Double.parseDouble(request.getParameter(param));
+		}
+		catch (Exception e) {
+		}
+
+		return value;
+	}
+
+	private static int _getInt(HttpServletRequest request, String param) {
+		int value = 0;
+
+		try {
+			value = Integer.parseInt(request.getParameter(param));
+		}
+		catch (Exception e) {
+		}
+
+		return value;
+	}
+
+	private static Cpf _getCpf(HttpServletRequest request, String param) {
+		Cpf cpf = null;
+
+		try {
+			String paramValue = request.getParameter(param);
+
+			if ((paramValue != null) && paramValue.length() == 11) {
+				String numero = paramValue.substring(0, 9);
+				String digito = paramValue.substring(10);
+
+				cpf = new Cpf(numero, digito);
+			}
+		}
+		catch (Exception e) {
+		}
+
+		return cpf;
+	}
+
+	private static String _getUniqueID() {
+		long time = (new Date()).getTime();
+
+		return String.valueOf(time);
+	}
 
 	@Override
 	protected void doGet(
@@ -30,49 +87,348 @@ public class JSONAction extends HttpServlet {
 		String cmd = request.getParameter("cmd");
 		String callback = request.getParameter("callback");
 
+		RepositorioClientesMySQL repositorioCliente =
+			new RepositorioClientesMySQL();
+		RepositorioContaCrediarioMySQL repositorioContaCrediarioMySQL =
+			new RepositorioContaCrediarioMySQL();
+		RepositorioMovimentoCrediarioMySQL repositorioMovimentoCrediarioMySQL =
+			new RepositorioMovimentoCrediarioMySQL();
+
 		if (cmd.equals("cadastrarCliente")) {
-			JSONObject test = new JSONObject();
+			JSONObject clienteJSONObject = new JSONObject();
 
 			try {
-				test.put("success", true);
+				Cpf cpf = _getCpf(request, "cpf");
+				String nome = request.getParameter("nome");
+				int idade = _getInt(request, "idade");
+				double renda = _getDouble(request, "renda");
+				int sexo = _getInt(request, "sexo");
+				double limiteDeCredito = _getDouble(request, "limiteDeCredito");
+				int vencimento = _getInt(request, "vencimento");
+
+				Cliente cliente = new Cliente(cpf, nome, idade, renda, sexo);
+
+				IdentificadorContaCrediario identificador =
+					new IdentificadorContaCrediario(_getUniqueID());
+
+				ContaCrediario contaCrediario = new ContaCrediario(identificador, cliente, limiteDeCredito, vencimento);
+
+				repositorioCliente.add(cliente);
+				repositorioContaCrediarioMySQL.add(contaCrediario);
+
+				clienteJSONObject = getClienteJSONObject(cliente);
 			}
 			catch (JSONException e) {
 				e.printStackTrace();
 			}
 
 			PrintWriter writer = response.getWriter();
-			writer.print(callback + "(" + test.toString() + ")");
+			writer.print(callback + "(" + clienteJSONObject.toString() + ")");
 		}
-		else {
-			RepositorioClientesMySQL repo = new RepositorioClientesMySQL();
+		else if (cmd.equals("alterarCadastroCliente")) {
+			JSONObject clienteJSONObject = new JSONObject();
 
-			Cpf cpf = new Cpf("05437707452");
+			try {
+				Cpf cpf = _getCpf(request, "cpf");
+				String nome = request.getParameter("nome");
+				int idade = _getInt(request, "idade");
+				double renda = _getDouble(request, "renda");
+				int sexo = _getInt(request, "sexo");
+				double limiteDeCredito = _getDouble(request, "limiteDeCredito");
+				int vencimento = _getInt(request, "vencimento");
 
-			Cliente cliente = new Cliente(cpf, "Bruno Basto", 23, 3500, 0);
+				Cliente cliente = new Cliente(cpf, nome, idade, renda, sexo);
 
-			repo.add(cliente);
+				IdentificadorContaCrediario identificador =
+					new IdentificadorContaCrediario(_getUniqueID());
+
+				ContaCrediario contaCrediario = new ContaCrediario(identificador, cliente, limiteDeCredito, vencimento);
+
+				repositorioCliente.update(cpf, cliente);
+				repositorioContaCrediarioMySQL.update(identificador, contaCrediario);
+
+				clienteJSONObject = getClienteJSONObject(cliente);
+			}
+			catch (JSONException e) {
+				e.printStackTrace();
+			}
+			catch (NoSuchRegistroException e) {
+				try {
+					clienteJSONObject.put("error", true);
+				} catch (JSONException e1) {
+					e1.printStackTrace();
+				}
+
+				e.printStackTrace();
+			}
+
+			PrintWriter writer = response.getWriter();
+			writer.print(callback + "(" + clienteJSONObject.toString() + ")");
+		}
+		else if (cmd.equals("excluirCliente")) {
+			JSONObject reponseJSONObject = new JSONObject();
+
+			try {
+				Cpf cpf = _getCpf(request, "cpf");
+
+				repositorioCliente.remove(cpf);
+
+				for (ContaCrediario conta : repositorioContaCrediarioMySQL.getAll()) {
+					if (conta != null) {
+						if (conta.getCliente().getChave().equals(cpf.getNumero())) {
+							repositorioContaCrediarioMySQL.remove(conta.getIdentificador());
+						}
+					}
+				}
+			}
+			catch (NoSuchRegistroException e) {
+				try {
+					reponseJSONObject.put("error", true);
+				} catch (JSONException e1) {
+					e1.printStackTrace();
+				}
+
+				e.printStackTrace();
+			}
+
+			PrintWriter writer = response.getWriter();
+			writer.print(callback + "(" + reponseJSONObject.toString() + ")");
+		}
+		else if (cmd.equals("buscarCliente")) {
+			JSONObject clienteJSONObject = new JSONObject();
+
+			try {
+				Cpf cpf = _getCpf(request, "cpf");
+
+				clienteJSONObject = getClienteJSONObject(repositorioCliente.get(cpf));
+			}
+			catch (NoSuchRegistroException e) {
+				try {
+					clienteJSONObject.put("error", true);
+				} catch (JSONException e1) {
+					e1.printStackTrace();
+				}
+
+				e.printStackTrace();
+			}
+			catch (JSONException e) {
+				e.printStackTrace();
+			}
+
+			PrintWriter writer = response.getWriter();
+			writer.print(callback + "(" + clienteJSONObject.toString() + ")");
+		}
+		else if (cmd.equals("mostrarExtratoCliente")) {
+			JSONObject clienteJSONObject = new JSONObject();
+
+			try {
+				Cpf cpf = _getCpf(request, "cpf");
+
+				clienteJSONObject = getClienteJSONObject(repositorioCliente.get(cpf));
+			}
+			catch (NoSuchRegistroException e) {
+				try {
+					clienteJSONObject.put("error", true);
+				} catch (JSONException e1) {
+					e1.printStackTrace();
+				}
+
+				e.printStackTrace();
+			}
+			catch (JSONException e) {
+				e.printStackTrace();
+			}
+
+			PrintWriter writer = response.getWriter();
+			writer.print(callback + "(" + clienteJSONObject.toString() + ")");
+		}
+		else if (cmd.equals("creditar")) {
+			JSONObject movimentoJSONObject = new JSONObject();
+
+			try {
+				String numeroIdentificador = request.getParameter(
+					"numeroIdentificador");
+				double valor = _getDouble(request, "valor");
+
+				IdentificadorContaCrediario identificador =
+					new IdentificadorContaCrediario(numeroIdentificador);
+
+				ContaCrediario contaCrediario =
+					repositorioContaCrediarioMySQL.get(numeroIdentificador);
+
+				contaCrediario.efetuarPagamento(valor);
+
+				MovimentoCrediario movimento = new MovimentoCrediarioCredito(
+					contaCrediario, valor, new Date());
+
+				movimento.validar();
+
+				repositorioMovimentoCrediarioMySQL.add(movimento);
+
+				repositorioContaCrediarioMySQL.update(identificador, contaCrediario);
+
+				movimentoJSONObject = getMovimentoCrediarioJSONObject(
+					movimento);
+			}
+			catch (NoSuchRegistroException e) {
+				try {
+					movimentoJSONObject.put("error", true);
+				} catch (JSONException e1) {
+					e1.printStackTrace();
+				}
+
+				e.printStackTrace();
+			}
+			catch (JSONException e) {
+				e.printStackTrace();
+			}
+			catch (ContaCrediarioException e) {
+				e.printStackTrace();
+			}
+
+			PrintWriter writer = response.getWriter();
+			writer.print(callback + "(" + movimentoJSONObject.toString() + ")");
+		}
+		else if (cmd.equals("debitar")) {
+			JSONObject movimentoJSONObject = new JSONObject();
+
+			try {
+				String numeroIdentificador = request.getParameter(
+					"numeroIdentificador");
+				double valor = _getDouble(request, "valor");
+
+				IdentificadorContaCrediario identificador =
+					new IdentificadorContaCrediario(numeroIdentificador);
+
+				ContaCrediario contaCrediario =
+					repositorioContaCrediarioMySQL.get(numeroIdentificador);
+
+				contaCrediario.efetuarCompra(valor);
+
+				MovimentoCrediario movimento = new MovimentoCrediarioDebito(
+					contaCrediario, valor, new Date());
+
+				movimento.validar();
+
+				repositorioMovimentoCrediarioMySQL.add(movimento);
+
+				repositorioContaCrediarioMySQL.update(identificador, contaCrediario);
+
+				movimentoJSONObject = getMovimentoCrediarioJSONObject(
+					movimento);
+			}
+			catch (NoSuchRegistroException e) {
+				try {
+					movimentoJSONObject.put("error", true);
+				} catch (JSONException e1) {
+					e1.printStackTrace();
+				}
+
+				e.printStackTrace();
+			}
+			catch (JSONException e) {
+				e.printStackTrace();
+			}
+			catch (ContaCrediarioException e) {
+				e.printStackTrace();
+			}
+
+			PrintWriter writer = response.getWriter();
+			writer.print(callback + "(" + movimentoJSONObject.toString() + ")");
+		}
+		else if (cmd.equals("transferir")) {
+			JSONObject movimentoJSONObject = new JSONObject();
+
+			try {
+				String numeroIdentificadorDebito = request.getParameter(
+					"numeroIdentificadorDebito");
+				String numeroIdentificadorCredito = request.getParameter(
+					"numeroIdentificadorCredito");
+				double valor = _getDouble(request, "valor");
+
+				IdentificadorContaCrediario identificadorDebito =
+					new IdentificadorContaCrediario(numeroIdentificadorDebito);
+
+				IdentificadorContaCrediario identificadorCredito =
+					new IdentificadorContaCrediario(numeroIdentificadorCredito);
+
+				ContaCrediario contaCrediarioDebito =
+					repositorioContaCrediarioMySQL.get(
+						numeroIdentificadorDebito);
+
+				contaCrediarioDebito.efetuarCompra(valor);
+
+				ContaCrediario contaCrediarioCredito =
+					repositorioContaCrediarioMySQL.get(
+						numeroIdentificadorCredito);
+
+				contaCrediarioCredito.efetuarPagamento(valor);
+
+				MovimentoCrediario movimentoDebito = new MovimentoCrediarioDebito(
+					contaCrediarioDebito, valor, new Date());
+
+				movimentoDebito.validar();
+
+				repositorioMovimentoCrediarioMySQL.add(movimentoDebito);
+
+				MovimentoCrediario movimentoCredito =
+					new MovimentoCrediarioCredito(
+						contaCrediarioDebito, valor, new Date());
+
+				movimentoCredito.validar();
+
+				repositorioMovimentoCrediarioMySQL.add(movimentoCredito);
+
+				repositorioContaCrediarioMySQL.update(
+					identificadorDebito, contaCrediarioDebito);
+				repositorioContaCrediarioMySQL.update(
+					identificadorCredito, contaCrediarioCredito);
+
+				movimentoJSONObject = getMovimentoCrediarioJSONObject(
+					movimentoCredito);
+			}
+			catch (NoSuchRegistroException e) {
+				try {
+					movimentoJSONObject.put("error", true);
+				} catch (JSONException e1) {
+					e1.printStackTrace();
+				}
+
+				e.printStackTrace();
+			}
+			catch (JSONException e) {
+				e.printStackTrace();
+			}
+			catch (ContaCrediarioException e) {
+				e.printStackTrace();
+			}
+
+			PrintWriter writer = response.getWriter();
+			writer.print(callback + "(" + movimentoJSONObject.toString() + ")");
+		}
+		else if (cmd.equals("mostrarTodosClientes")) {
+			Cliente[] clientes = repositorioCliente.getAll();
 
 			JSONArray jsonArray = new JSONArray();
 
-			Cliente[] clientes = repo.getAll();
+			try {
+				for (Cliente cliente : clientes) {
+					if (cliente == null) {
+						continue;
+					}
 
-			for (Cliente cliente2 : clientes) {
-				if (cliente2 == null) {
-					continue;
-				}
-
-				try {
-					jsonArray.put(getClienteJSONObject(cliente2));
-				} catch (JSONException e) {
-					e.printStackTrace();
+					jsonArray.put(getClienteJSONObject(cliente));
 				}
 			}
+			catch (JSONException e) {
+				e.printStackTrace();
+			}
 
-			response.setCharacterEncoding("UTF-8");
-			response.setContentType("application/json");
+			PrintWriter writer = response.getWriter();
+			writer.print(callback + "(" + jsonArray.toString() + ")");
+		}
+		else {
 
-		    PrintWriter writer = response.getWriter();
-		    writer.print(jsonArray.toString());
 		}
 	}
 
@@ -81,14 +437,45 @@ public class JSONAction extends HttpServlet {
 
 		JSONObject clienteJSONObject = new JSONObject();
 
-		clienteJSONObject.put("cpf", getCpfJSONObject(cliente.getCpf()));
+		clienteJSONObject.put("cpf", cliente.getChave());
 		clienteJSONObject.put("nome", cliente.getNome());
 		clienteJSONObject.put("idade", cliente.getIdade());
 		clienteJSONObject.put("clienteDesde", cliente.getClienteDesde());
 		clienteJSONObject.put("renda", cliente.getRenda());
 		clienteJSONObject.put("sexo", cliente.getSexo());
 
+		ContaCrediario conta = getContaCliente(cliente);
+
+		String numeroConta = "Sem conta";
+
+		if (conta != null) {
+			numeroConta = conta.getChave();
+		}
+
+		clienteJSONObject.put("conta", numeroConta);
+
 		return clienteJSONObject;
+	}
+
+	private ContaCrediario getContaCliente(Cliente cliente) {
+		RepositorioContaCrediarioMySQL repositorioContaCrediarioMySQL =
+			new RepositorioContaCrediarioMySQL();
+
+		try {
+			for (ContaCrediario conta : repositorioContaCrediarioMySQL.getAll()) {
+				if ((conta != null) &&
+					conta.getCliente().getChave().equals(cliente.getChave())) {
+
+					return conta;
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (NoSuchRegistroException e) {
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 
 	private JSONObject getContaCrediarioJSONObject(
@@ -110,15 +497,6 @@ public class JSONAction extends HttpServlet {
 			"vencimento", contaCrediario.getSaldoDevido());
 
 		return contaCrediarioJSONObject;
-	}
-
-	private JSONObject getCpfJSONObject(Cpf cpf) throws JSONException {
-		JSONObject cpfJSONObject = new JSONObject();
-
-		cpfJSONObject.put("numero", cpf.getNumero());
-		cpfJSONObject.put("digito", cpf.calcularDigito());
-
-		return cpfJSONObject;
 	}
 
 	private JSONObject getMovimentoCrediarioJSONObject(

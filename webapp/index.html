@@ -47,37 +47,39 @@
 				<h1>Cadastrar Cliente</h1>
 			</div>
 
-			<form id="cadastroClienteForm">
-				<label for="cpf">CPF:</label>
-				<input type="text" name="cpf" id="cpf" data-mini="true" />
+			<div data-role="content">
+				<form id="cadastroClienteForm">
+					<label for="cpf">CPF:</label>
+					<input type="text" name="cpf" id="cpf" data-mini="true" />
 
-				<label for="nome">Nome:</label>
-				<input type="text" name="nome" id="nome" data-mini="true" />
+					<label for="nome">Nome:</label>
+					<input type="text" name="nome" id="nome" data-mini="true" />
 
-				<label for="idade">Idade:</label>
-				<input type="text" name="idade" id="idade" data-mini="true" />
+					<label for="idade">Idade:</label>
+					<input type="text" name="idade" id="idade" data-mini="true" />
 
-				<label for="renda">Renda:</label>
-				<input type="text" name="renda" id="renda" data-mini="true" />
+					<label for="renda">Renda:</label>
+					<input type="text" name="renda" id="renda" data-mini="true" />
 
-				<fieldset data-role="controlgroup">
-					<legend>Sexo:</legend>
+					<fieldset data-role="controlgroup">
+						<legend>Sexo:</legend>
 
-			     	<input type="radio" name="sexo" id="sexoMasculino" value="0" checked="checked" />
-			     	<label for="sexoMasculino">Masculino</label>
+				     	<input type="radio" name="sexo" id="sexoMasculino" value="0" checked="checked" />
+				     	<label for="sexoMasculino">Masculino</label>
 
-			     	<input type="radio" name="sexo" id="sexoFeminino" value="1"  />
-			     	<label for="sexoFeminino">Feminino</label>
-				</fieldset>
+				     	<input type="radio" name="sexo" id="sexoFeminino" value="1"  />
+				     	<label for="sexoFeminino">Feminino</label>
+					</fieldset>
 
-				<label for="limiteCredito">Limite de Crédito:</label>
-				<input type="text" name="limiteCredito" id="limiteCredito" data-mini="true" />
+					<label for="limiteCredito">Limite de Crédito:</label>
+					<input type="text" name="limiteCredito" id="limiteCredito" data-mini="true" />
 
-				<label for="vencimento">Vencimento da Fatura:</label>
-				<input type="text" name="vencimento" id="vencimento" data-mini="true" />
+					<label for="vencimento">Vencimento da Fatura:</label>
+					<input type="text" name="vencimento" id="vencimento" data-mini="true" />
 
-				<a href="javascript:;" data-role="button" id="salvarCadastroCliente">Salvar</a>
-			</form>
+					<a href="javascript:;" data-role="button" id="salvarCadastroCliente">Salvar</a>
+				</form>
+			</div>
 		</div>
 
 		<div data-role="page" id="alterarCadastroClienteView">
@@ -86,7 +88,37 @@
 			</div>
 
 			<div data-role="content">
-				<ul data-role="listview" id="playersList"></ul>
+				<form id="alterarCadastroClienteForm">
+					<label for="cpf">CPF:</label>
+					<input type="text" name="cpf" id="cpf" data-mini="true" />
+
+					<label for="nome">Nome:</label>
+					<input type="text" name="nome" id="nome" data-mini="true" />
+
+					<label for="idade">Idade:</label>
+					<input type="text" name="idade" id="idade" data-mini="true" />
+
+					<label for="renda">Renda:</label>
+					<input type="text" name="renda" id="renda" data-mini="true" />
+
+					<fieldset data-role="controlgroup">
+						<legend>Sexo:</legend>
+
+				     	<input type="radio" name="sexo" id="sexoMasculino" value="0" checked="checked" />
+				     	<label for="sexoMasculino">Masculino</label>
+
+				     	<input type="radio" name="sexo" id="sexoFeminino" value="1"  />
+				     	<label for="sexoFeminino">Feminino</label>
+					</fieldset>
+
+					<label for="limiteCredito">Limite de Crédito:</label>
+					<input type="text" name="limiteCredito" id="limiteCredito" data-mini="true" />
+
+					<label for="vencimento">Vencimento da Fatura:</label>
+					<input type="text" name="vencimento" id="vencimento" data-mini="true" />
+
+					<a href="javascript:;" data-role="button" id="salvarAlterarCadastroCliente">Salvar</a>
+				</form>
 			</div>
 		</div>
 
@@ -96,7 +128,12 @@
 			</div>
 
 			<div data-role="content">
-				<ul data-role="listview" id="playersList"></ul>
+				<form id="excluirClienteForm">
+					<label for="cpf">CPF:</label>
+					<input type="text" name="cpf" id="cpf" data-mini="true" />
+
+					<a href="javascript:;" data-role="button" id="excluirCliente">Excluir</a>
+				</form>
 			</div>
 		</div>
 
@@ -106,7 +143,7 @@
 			</div>
 
 			<div data-role="content">
-				<ul data-role="listview" id="playersList"></ul>
+				<ul data-role="listview" id="clientesList"></ul>
 			</div>
 		</div>
 
@@ -116,7 +153,12 @@
 			</div>
 
 			<div data-role="content">
-				<ul data-role="listview" id="playersList"></ul>
+				<form id="buscarClienteForm">
+					<label for="cpf">CPF:</label>
+					<input type="text" name="cpf" id="cpf" data-mini="true" />
+
+					<a href="javascript:;" data-role="button" id="buscarCliente">Buscar</a>
+				</form>
 			</div>
 		</div>
 
@@ -126,7 +168,15 @@
 			</div>
 
 			<div data-role="content">
-				<ul data-role="listview" id="playersList"></ul>
+				<form id="creditarForm">
+					<label for="numeroIdentificador">Numero da Conta:</label>
+					<input type="text" name="numeroIdentificador" id="numeroIdentificador" data-mini="true" />
+
+					<label for="valor">Valor:</label>
+					<input type="text" name="valor" id="valor" data-mini="true" />
+
+					<a href="javascript:;" data-role="button" id="creditar">Creditar</a>
+				</form>
 			</div>
 		</div>
 
@@ -136,7 +186,15 @@
 			</div>
 
 			<div data-role="content">
-				<ul data-role="listview" id="playersList"></ul>
+				<form id="debitarForm">
+					<label for="numeroIdentificador">Numero da Conta:</label>
+					<input type="text" name="numeroIdentificador" id="numeroIdentificador" data-mini="true" />
+
+					<label for="valor">Valor:</label>
+					<input type="text" name="valor" id="valor" data-mini="true" />
+
+					<a href="javascript:;" data-role="button" id="debitar">Debitar</a>
+				</form>
 			</div>
 		</div>
 
@@ -146,7 +204,18 @@
 			</div>
 
 			<div data-role="content">
-				<ul data-role="listview" id="playersList"></ul>
+				<form id="transferirForm">
+					<label for="numeroIdentificadorDebito">Numero da Conta (a debitar):</label>
+					<input type="text" name="numeroIdentificadorDebito" id="numeroIdentificadorDebito" data-mini="true" />
+
+					<label for="numeroIdentificadorCredito">Numero da Conta (a creditar):</label>
+					<input type="text" name="numeroIdentificadorCredito" id="numeroIdentificadorCredito" data-mini="true" />
+
+					<label for="valor">Valor:</label>
+					<input type="text" name="valor" id="valor" data-mini="true" />
+
+					<a href="javascript:;" data-role="button" id="transferir">Transferir</a>
+				</form>
 			</div>
 		</div>
 
@@ -156,7 +225,12 @@
 			</div>
 
 			<div data-role="content">
-				<ul data-role="listview" id="playersList"></ul>
+				<form id="mostrarExtratoClienteForm">
+					<label for="cpf">CPF:</label>
+					<input type="text" name="cpf" id="cpf" data-mini="true" />
+
+					<a href="javascript:;" data-role="button" id="mostrarExtratoCliente">Mostrar</a>
+				</form>
 			</div>
 		</div>
 

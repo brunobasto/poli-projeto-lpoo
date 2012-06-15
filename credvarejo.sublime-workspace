@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"_on",
+				"_onMenuItem"
+			],
+			[
 				"remove",
 				"removeProxy"
 			],
@@ -510,10 +514,6 @@
 			[
 				"rel",
 				"relative"
-			],
-			[
-				"vert",
-				"vertical-align"
 			]
 		]
 	},
@@ -712,10 +712,12 @@
 	},
 	"file_history":
 	[
+		"/Volumes/brunobasto/Projects/lpoo_loja/source/build.xml",
+		"/Volumes/brunobasto/Projects/lpoo_loja/source/webapp/js/lpoo.credvarejo.js",
+		"/Volumes/brunobasto/Projects/lpoo_loja/source/webapp/js/lpoo.core.js",
+		"/Volumes/brunobasto/Projects/lpoo_loja/source/webapp/index.html",
 		"/Volumes/brunobasto/Projects/lpoo_loja/source/webapp/WEB-INF/web.xml",
 		"/Volumes/brunobasto/Projects/lpoo_loja/source/webapps/ROOT/WEB-INF/struts-config.xml",
-		"/Volumes/brunobasto/Projects/lpoo_loja/source/webapp/index.html",
-		"/Volumes/brunobasto/Projects/lpoo_loja/source/build.xml",
 		"/Volumes/brunobasto/Projects/lpoo_loja/source/webapps/ROOT/WEB-INF/web.xml",
 		"/Volumes/brunobasto/Projects/lpoo_loja/source/webapps/WEB-INF/struts-config.xml",
 		"/Volumes/liferay/git/alloy-ui/src/aui-scheduler/js/aui-scheduler-event-recorder.js",
@@ -837,9 +839,7 @@
 		"/Volumes/liferay/github/alloy-ui/build/aui-scheduler/aui-scheduler-event.js",
 		"/Volumes/liferay/github/alloy-ui/src/aui-scheduler/js/aui-scheduler-event.js",
 		"/Volumes/liferay/github/alloy-ui/src/aui-scheduler/js/aui-scheduler-view-day.js",
-		"/Volumes/liferay/github/alloy-ui/build/pluginhost-config/pluginhost-config-debug.js",
-		"/Volumes/liferay/github/alloy-ui/build/resize-plugin/resize-plugin.js",
-		"/Volumes/liferay/github/alloy-ui/src/aui-scheduler/assets/aui-scheduler-view-core.css"
+		"/Volumes/liferay/github/alloy-ui/build/pluginhost-config/pluginhost-config-debug.js"
 	],
 	"find":
 	{
@@ -847,7 +847,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 0.0,
+		"height": 93.0,
 		"where_history":
 		[
 			"/Volumes/liferay/git/alloy-ui/src",
@@ -886,6 +886,19 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"getFormData",
+			"_onMenuItem",
+			"basic",
+			"radio-choice-1",
+			"radio-choice-2",
+			"radio-choice-1",
+			"Text",
+			"text",
+			"Text",
+			"player",
+			"iUR",
+			"themes/",
+			"lib/",
 			"build",
 			"_syncProxyNodeUI",
 			"_onEventDragEnd",
@@ -1000,20 +1013,7 @@
 			"filterFn",
 			"syncEventsIntersectionUI",
 			"findEventIntersections",
-			"syncEventsIntersectionUI",
-			"findEventIntersections",
-			"_filtered",
-			"filterFn",
-			"findEventIntersections",
-			"syncEventsIntersectionUI",
-			"nodeDate",
-			"titleNode",
-			"instance.evtDataTableStack[cacheKey]",
-			"_getEvtSplitInfo",
-			"_addStdModContent",
-			"_uiSetStdMod",
-			"headerContent",
-			"('hei"
+			"syncEventsIntersectionUI"
 		],
 		"highlight": true,
 		"in_selection": false,

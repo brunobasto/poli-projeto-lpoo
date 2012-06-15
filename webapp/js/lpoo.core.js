@@ -120,6 +120,10 @@ LPOO = $.klass(
 						var error = response.error;
 						var message = error.message;
 
+						if (!message) {
+							message = 'Ocorreu um erro durante sua requisição.';
+						}
+
 						instance.showMessage(message);
 
 						if (errorFn) {
@@ -127,13 +131,11 @@ LPOO = $.klass(
 						}
 					}
 					else {
-						console.log('An unexpected error occurred with the response:', response);
+						console.log('Ocorreu um erro durante sua requisição:', response);
 					}
 				},
 				error: function(response, status, error) {
-					alert('error');
-
-					instance.showMessage('An error occurred during your request. Please try again later.');
+					instance.showMessage('Um erro inesperado ocorreu.');
 
 					if (errorFn) {
 						errorFn.apply(instance, [error]);
